@@ -1,0 +1,21 @@
+{
+  "short_name": "Vale Apoio",
+  "name": "Vale Apoio - Financiamento Coletivo Eleitoral",
+  "description": "A political crowdfunding application (vaquinha virtual) compliant with TSE regulations, enabling candidates to raise funds and donors to support campaigns transparently.",
+  "icons": [
+    {
+      "src": "https://horizons-cdn.hostinger.com/ee1fec56-56e3-4bfc-a3ed-03c9f212598d/fe38288150e25602714ae005742ecb0b.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://horizons-cdn.hostinger.com/ee1fec56-56e3-4bfc-a3ed-03c9f212598d/fe38288150e25602714ae005742ecb0b.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#6366F1",
+  "background_color": "#f9fafb"
+}
