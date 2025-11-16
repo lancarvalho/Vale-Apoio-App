@@ -1,4 +1,3 @@
-
 export interface Party {
   acronym: string;
   name: string;
@@ -31,5 +30,5 @@ export interface User {
   name: string;
   email: string;
   cpf: string;
-  type: 'candidate' | 'donor';
+  type: 'candidate' | 'donor' | 'admin';
 }

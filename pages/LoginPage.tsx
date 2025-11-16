@@ -16,7 +16,11 @@ const LoginPage: React.FC = () => {
         setError('');
 
         // Mock login logic
-        if (email.includes('candidato')) {
+        if (email.includes('admin')) {
+            const mockUser = { id: 99, name: 'Administrador', email, cpf: '000.000.000-00', type: 'admin' as const };
+            login(mockUser);
+            navigate('/admin');
+        } else if (email.includes('candidato')) {
             const mockUser = { id: 1, name: 'Candidato Exemplo', email, cpf: '123.456.789-00', type: 'candidate' as const };
             login(mockUser);
             navigate('/painel');
@@ -25,7 +29,7 @@ const LoginPage: React.FC = () => {
             login(mockUser);
             navigate('/doador');
         } else {
-            setError('Credenciais inválidas. Use "candidato@email.com" ou "doador@email.com" para teste.');
+            setError('Credenciais inválidas. Use "admin@email.com", "candidato@email.com" ou "doador@email.com" para teste.');
         }
     };
 

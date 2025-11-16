@@ -17,6 +17,11 @@ import DashboardProfilePage from './pages/dashboard/DashboardProfilePage';
 import DonorDashboardPage from './pages/DonorDashboardPage';
 import PublicLayout from './components/PublicLayout';
 
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminHomePage from './pages/admin/AdminHomePage';
+import AdminCandidatesPage from './pages/admin/AdminCandidatesPage';
+import AdminWithdrawalsPage from './pages/admin/AdminWithdrawalsPage';
+
 const App: React.FC = () => {
   return (
     <AuthProvider>
@@ -39,6 +44,13 @@ const App: React.FC = () => {
           </Route>
 
           <Route path="/doador" element={<DonorDashboardPage />} />
+
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminHomePage />} />
+            <Route path="candidatos" element={<AdminCandidatesPage />} />
+            <Route path="saques" element={<AdminWithdrawalsPage />} />
+          </Route>
+
         </Routes>
       </HashRouter>
     </AuthProvider>
