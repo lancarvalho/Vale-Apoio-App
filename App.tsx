@@ -6,6 +6,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import HomePage from './pages/HomePage';
 import CandidatesPage from './pages/CandidatesPage';
 import CandidateProfilePage from './pages/CandidateProfilePage';
+import RegisterChoicePage from './pages/RegisterChoicePage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import HelpPage from './pages/HelpPage';
@@ -15,7 +16,6 @@ import DashboardHomePage from './pages/dashboard/DashboardHomePage';
 import DashboardWithdrawalsPage from './pages/dashboard/DashboardWithdrawalsPage';
 import DashboardReportsPage from './pages/dashboard/DashboardReportsPage';
 import DashboardProfilePage from './pages/dashboard/DashboardProfilePage';
-import DonorDashboardPage from './pages/DonorDashboardPage';
 import PublicLayout from './components/PublicLayout';
 
 import AdminLayout from './pages/admin/AdminLayout';
@@ -32,7 +32,8 @@ const App: React.FC = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/candidatos" element={<CandidatesPage />} />
             <Route path="/candidatos/:slug" element={<CandidateProfilePage />} />
-            <Route path="/cadastrar" element={<RegisterPage />} />
+            <Route path="/cadastrar" element={<RegisterChoicePage />} />
+            <Route path="/cadastrar-candidato" element={<RegisterPage />} />
             <Route path="/acessar" element={<LoginPage />} />
             <Route path="/ajuda" element={<HelpPage />} />
             <Route path="/termos" element={<TermsPage />} />
@@ -44,8 +45,6 @@ const App: React.FC = () => {
             <Route path="comprovantes-tse" element={<DashboardReportsPage />} />
             <Route path="perfil" element={<DashboardProfilePage />} />
           </Route>
-
-          <Route path="/doador" element={<DonorDashboardPage />} />
 
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminHomePage />} />

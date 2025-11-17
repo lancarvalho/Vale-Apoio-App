@@ -24,12 +24,8 @@ const LoginPage: React.FC = () => {
             const mockUser = { id: 1, name: 'Candidato Exemplo', email, cpf: '123.456.789-00', type: 'candidate' as const };
             login(mockUser);
             navigate('/painel');
-        } else if (email.includes('doador')) {
-            const mockUser = { id: 2, name: 'Doador Exemplo', email, cpf: '987.654.321-00', type: 'donor' as const };
-            login(mockUser);
-            navigate('/doador');
         } else {
-            setError('Credenciais inválidas. Use "admin@email.com", "candidato@email.com" ou "doador@email.com" para teste.');
+            setError('Credenciais inválidas. Use "admin@email.com" ou "candidato@email.com" para teste.');
         }
     };
 

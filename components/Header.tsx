@@ -11,8 +11,6 @@ const Header: React.FC = () => {
   const handleDashboardAccess = () => {
     if (user?.type === 'candidate') {
       navigate('/painel');
-    } else if (user?.type === 'donor') {
-      navigate('/doador');
     }
   };
 
