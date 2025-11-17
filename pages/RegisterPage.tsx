@@ -33,9 +33,9 @@ const RegisterPage: React.FC = () => {
         const mockUser = { id: Date.now(), name, email, cpf, type: 'candidate' as const };
         login(mockUser);
         
-        // On a real app, this would go to a payment page for the R$179,00 fee.
+        // On a real app, this would go to a payment page for the R$189,00 fee.
         // Here, we'll just navigate to the dashboard.
-        alert('Cadastro realizado com sucesso! Em um cenário real, você seria redirecionado para o pagamento da taxa de inscrição de R$179,00.');
+        alert('Cadastro realizado com sucesso! Em um cenário real, você seria redirecionado para o pagamento da taxa de inscrição de R$189,00.');
         navigate('/painel');
     };
 
@@ -54,7 +54,7 @@ const RegisterPage: React.FC = () => {
                         </li>
                         <li className="flex items-start">
                             <span className="bg-secondary rounded-full text-white text-xs font-bold w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">✓</span>
-                            <span>Taxa única de inscrição de <strong>R$179,00</strong>.</span>
+                            <span>Taxa única de inscrição de <strong>R$189,00</strong>.</span>
                         </li>
                         <li className="flex items-start">
                            <span className="bg-secondary rounded-full text-white text-xs font-bold w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">✓</span>

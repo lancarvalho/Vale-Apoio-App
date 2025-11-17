@@ -53,7 +53,7 @@ const TermsPage: React.FC = () => {
           
           <H2>VII - CUSTOS</H2>
           <P>
-            A plataforma Vale Apoio cobra taxa de adesão de R$ 179,00 (cento e setenta e nove reais), podendo, a seu critério, conceder descontos e isenções.
+            A plataforma Vale Apoio cobra taxa de adesão de R$ 189,00 (cento e oitenta e nove reais), podendo, a seu critério, conceder descontos e isenções.
           </P>
           <P>
             <strong>TARIFA DE INTERMEDIAÇÃO:</strong> Doações, de todas as suas formas, se por cartão de crédito – 3,65% sobre o valor doado. Doações por boleto bancário – 3,65% sobre o valor doado. Doações por pix – 3,65% sobre o valor doado.

@@ -75,7 +75,7 @@ const HelpPage: React.FC = () => {
                            <p>Sim. Todas as transações financeiras feitas por cartão de crédito possuem um rigoroso sistema antifraude para não colocar o seu apoio em risco.</p>
                         </FaqItem>
                         <FaqItem question="Quais são as taxas da plataforma?">
-                           <p>Para doações (PIX, cartão ou boleto), a taxa é de <strong>3,65%</strong> por transação. Para candidatos, existe uma taxa única de adesão de <strong>R$179,00</strong>, paga no início do período de arrecadação. Para saques, o primeiro é gratuito e os demais custam <strong>R$5,00</strong> por operação.</p>
+                           <p>Para doações (PIX, cartão ou boleto), a taxa é de <strong>3,65%</strong> por transação. Para candidatos, existe uma taxa única de adesão de <strong>R$189,00</strong>, paga no início do período de arrecadação. Para saques, o primeiro é gratuito e os demais custam <strong>R$5,00</strong> por operação.</p>
                         </FaqItem>
                          <FaqItem question="É emitido um recibo de doação?">
                            <p>Sim. Seguindo as regras do TSE, um recibo oficial é emitido no CPF do doador para cada doação realizada, garantindo a transparência e conformidade legal.</p>
