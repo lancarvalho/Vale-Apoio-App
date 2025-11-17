@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Logo from './Logo';
 
 const Footer: React.FC = () => {
@@ -9,9 +10,10 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left space-y-4 md:space-y-0">
           <div className="flex flex-col space-y-2 items-center md:items-start">
             <Logo />
-            <p className="text-sm text-gray-500">ValeApoio.com.br | CNPJ 00.000.000/0001-00</p>
+            <p className="text-sm text-gray-500">ValeApoio.com.br | CNPJ 55.302.823/0001-63</p>
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="flex gap-4 text-sm text-gray-500">
+            <Link to="/termos" className="hover:underline">Termos e Condições</Link>
             <a href="#" className="hover:underline">Dados Anteriores</a>
           </div>
         </div>

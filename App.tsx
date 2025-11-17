@@ -9,6 +9,7 @@ import CandidateProfilePage from './pages/CandidateProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import HelpPage from './pages/HelpPage';
+import TermsPage from './pages/TermsPage';
 import DashboardLayout from './pages/dashboard/DashboardLayout';
 import DashboardHomePage from './pages/dashboard/DashboardHomePage';
 import DashboardWithdrawalsPage from './pages/dashboard/DashboardWithdrawalsPage';
@@ -34,6 +35,7 @@ const App: React.FC = () => {
             <Route path="/cadastrar" element={<RegisterPage />} />
             <Route path="/acessar" element={<LoginPage />} />
             <Route path="/ajuda" element={<HelpPage />} />
+            <Route path="/termos" element={<TermsPage />} />
           </Route>
           
           <Route path="/painel" element={<DashboardLayout />}>
