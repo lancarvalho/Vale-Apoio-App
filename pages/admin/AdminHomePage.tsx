@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { MOCK_CANDIDATES, PARTIES } from '../../constants';
-import { DollarSign, Users, Clock, CheckCircle } from 'lucide-react';
+import { useMaintenance } from '../../contexts/MaintenanceContext';
+import { DollarSign, Users, Clock, CheckCircle, AlertTriangle, Power } from 'lucide-react';
 import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 
 const StatCard: React.FC<{ title: string; value: string; icon: React.ElementType }> = ({ title, value, icon: Icon }) => (
@@ -17,6 +18,8 @@ const StatCard: React.FC<{ title: string; value: string; icon: React.ElementType
 );
 
 const AdminHomePage: React.FC = () => {
+    const { isMaintenanceMode, toggleMaintenanceMode } = useMaintenance();
+
     const totalRaised = MOCK_CANDIDATES.reduce((total, candidate) => 
         total + candidate.donations.reduce((sum, d) => sum + d.amount, 0), 0);
 
@@ -47,8 +50,34 @@ const AdminHomePage: React.FC = () => {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard Administrativo</h1>
-            <p className="mt-1 text-gray-600">Visão geral da plataforma Vale Apoio.</p>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900">Dashboard Administrativo</h1>
+                    <p className="mt-1 text-gray-600">Visão geral da plataforma Vale Apoio.</p>
+                </div>
+                
+                {/* Controle do Modo Manutenção */}
+                <div className={`flex items-center gap-4 p-4 rounded-lg border ${isMaintenanceMode ? 'bg-yellow-50 border-yellow-200' : 'bg-white border-gray-200 shadow-sm'}`}>
+                    <div className="flex flex-col">
+                        <span className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                            {isMaintenanceMode ? <AlertTriangle size={16} className="text-yellow-600"/> : <CheckCircle size={16} className="text-green-500"/>}
+                            Status do Site: {isMaintenanceMode ? 'EM MANUTENÇÃO' : 'NO AR'}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                            {isMaintenanceMode ? 'O público vê a página "Em Breve".' : 'O site está acessível a todos.'}
+                        </span>
+                    </div>
+                    <button 
+                        onClick={toggleMaintenanceMode}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${isMaintenanceMode ? 'bg-yellow-500' : 'bg-gray-200'}`}
+                    >
+                        <span className="sr-only">Ativar Manutenção</span>
+                        <span
+                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isMaintenanceMode ? 'translate-x-6' : 'translate-x-1'}`}
+                        />
+                    </button>
+                </div>
+            </div>
 
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatCard title="Total Arrecadado" value={totalRaised.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} icon={DollarSign} />
