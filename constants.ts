@@ -1,5 +1,5 @@
 
-import { Party, Candidate } from './types';
+import { Party, Candidate, AuditLog } from './types';
 
 export const PARTIES: Party[] = [
   { acronym: "MDB", name: "Movimento Democrático Brasileiro" },
@@ -44,9 +44,11 @@ export const MOCK_CANDIDATES: Candidate[] = [
         state: 'SP',
         description: 'Lutando por uma educação de qualidade e mais oportunidades para todos os cidadãos de São Paulo.',
         campaignCnpj: '12.345.678/0001-90',
+        paymentStatus: 'Ativo',
+        tseStatus: 'Deferida',
         donations: [
-            { id: 101, donorName: 'Carlos Pereira', donorCpf: '111.***.***-11', amount: 150, paymentMethod: 'PIX', date: '2024-07-20T10:00:00Z' },
-            { id: 102, donorName: 'Mariana Costa', donorCpf: '222.***.***-22', amount: 75, paymentMethod: 'Cartão de Crédito', date: '2024-07-21T14:30:00Z' },
+            { id: 101, donorName: 'Carlos Pereira', donorCpf: '111.***.***-11', amount: 150, paymentMethod: 'PIX', date: '2024-07-20T10:00:00Z', receiptId: 'REC-2026-101' },
+            { id: 102, donorName: 'Mariana Costa', donorCpf: '222.***.***-22', amount: 75, paymentMethod: 'Cartão de Crédito', date: '2024-07-21T14:30:00Z', receiptId: 'REC-2026-102' },
         ],
     },
     {
@@ -59,8 +61,10 @@ export const MOCK_CANDIDATES: Candidate[] = [
         state: 'RJ',
         description: 'Compromisso com a segurança pública e o desenvolvimento econômico do Rio de Janeiro.',
         campaignCnpj: '23.456.789/0001-80',
+        paymentStatus: 'Ativo',
+        tseStatus: 'Deferida com Recurso',
         donations: [
-            { id: 201, donorName: 'Fernanda Lima', donorCpf: '333.***.***-33', amount: 200, paymentMethod: 'Boleto', date: '2024-07-19T09:00:00Z' },
+            { id: 201, donorName: 'Fernanda Lima', donorCpf: '333.***.***-33', amount: 200, paymentMethod: 'Boleto', date: '2024-07-19T09:00:00Z', receiptId: 'REC-2026-201' },
         ],
     },
     {
@@ -73,10 +77,11 @@ export const MOCK_CANDIDATES: Candidate[] = [
         state: 'MG',
         description: 'Foco na saúde e na infraestrutura para melhorar a vida dos mineiros.',
         campaignCnpj: '34.567.890/0001-70',
+        paymentStatus: 'Pendente',
+        tseStatus: 'Aguardando',
         donations: [
-            { id: 301, donorName: 'Ricardo Alves', donorCpf: '444.***.***-44', amount: 50, paymentMethod: 'PIX', date: '2024-07-22T11:20:00Z' },
-            { id: 302, donorName: 'Juliana Martins', donorCpf: '555.***.***-55', amount: 300, paymentMethod: 'PIX', date: '2024-07-22T18:00:00Z' },
-            { id: 303, donorName: 'Lucas Souza', donorCpf: '666.***.***-66', amount: 120, paymentMethod: 'Cartão de Crédito', date: '2024-07-23T12:00:00Z' },
+            { id: 301, donorName: 'Ricardo Alves', donorCpf: '444.***.***-44', amount: 50, paymentMethod: 'PIX', date: '2024-07-22T11:20:00Z', receiptId: 'REC-2026-301' },
+            { id: 302, donorName: 'Juliana Martins', donorCpf: '555.***.***-55', amount: 300, paymentMethod: 'PIX', date: '2024-07-22T18:00:00Z', receiptId: 'REC-2026-302' },
         ],
     },
     {
@@ -89,8 +94,10 @@ export const MOCK_CANDIDATES: Candidate[] = [
         state: 'BA',
         description: 'Defendendo a cultura, o meio ambiente e os direitos humanos na Bahia.',
         campaignCnpj: '45.678.901/0001-60',
+        paymentStatus: 'Ativo',
+        tseStatus: 'Indeferida',
         donations: [
-             { id: 401, donorName: 'Roberto Dias', donorCpf: '777.***.***-77', amount: 90, paymentMethod: 'Boleto', date: '2024-07-23T15:45:00Z' },
+             { id: 401, donorName: 'Roberto Dias', donorCpf: '777.***.***-77', amount: 90, paymentMethod: 'Boleto', date: '2024-07-23T15:45:00Z', receiptId: 'REC-2026-401' },
         ],
     },
      {
@@ -103,9 +110,15 @@ export const MOCK_CANDIDATES: Candidate[] = [
         state: 'PR',
         description: 'Inovação e tecnologia para um futuro mais próspero para Curitiba.',
         campaignCnpj: '56.789.012/0001-50',
-        donations: [
-             { id: 501, donorName: 'Beatriz Rocha', donorCpf: '888.***.***-88', amount: 250, paymentMethod: 'PIX', date: '2024-07-24T08:10:00Z' },
-             { id: 502, donorName: 'Daniel Azevedo', donorCpf: '999.***.***-99', amount: 40, paymentMethod: 'Cartão de Crédito', date: '2024-07-24T10:30:00Z' },
-        ],
+        paymentStatus: 'Rejeitado',
+        tseStatus: 'Inapto',
+        donations: [],
     },
+];
+
+export const MOCK_AUDIT_LOGS: AuditLog[] = [
+    { id: 1, timestamp: '20/11/2025, 19:20:31', user: 'admin@valeapoio.com', action: 'Pagamento Confirmado', details: 'Candidato: Ana Silva (ID: 1)' },
+    { id: 2, timestamp: '20/11/2025, 19:15:31', user: 'admin@valeapoio.com', action: 'Consulta TSE', details: 'Candidato: Bruno Santos, Resultado: Deferida com Recurso' },
+    { id: 3, timestamp: '20/11/2025, 18:30:10', user: 'system', action: 'Backup Automático', details: 'Backup diário do banco de dados realizado com sucesso.' },
+    { id: 4, timestamp: '20/11/2025, 14:10:05', user: 'candidato@email.com', action: 'Solicitação de Saque', details: 'Valor: R$ 3.500,00 - Protocolo: #998877' },
 ];

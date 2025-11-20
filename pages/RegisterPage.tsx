@@ -28,15 +28,20 @@ const RegisterPage: React.FC = () => {
             return;
         }
         
-        // Mock registration and login
-        console.log('Registering user:', { name, cpf, email });
-        const mockUser = { id: Date.now(), name, email, cpf, type: 'candidate' as const };
+        // Create user with pending payment status
+        const mockUser = { 
+            id: Date.now(), 
+            name, 
+            email, 
+            cpf, 
+            type: 'candidate' as const,
+            pendingPayment: true 
+        };
+        
         login(mockUser);
         
-        // On a real app, this would go to a payment page for the R$189,00 fee.
-        // Here, we'll just navigate to the dashboard.
-        alert('Cadastro realizado com sucesso! Em um cenário real, você seria redirecionado para o pagamento da taxa de inscrição de R$189,00.');
-        navigate('/painel');
+        // Redirect to Payment Page
+        navigate('/pagamento-inscricao');
     };
 
     return (
@@ -54,7 +59,7 @@ const RegisterPage: React.FC = () => {
                         </li>
                         <li className="flex items-start">
                             <span className="bg-secondary rounded-full text-white text-xs font-bold w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">✓</span>
-                            <span>Taxa única de inscrição de <strong>R$189,00</strong>.</span>
+                            <span>Taxa única de inscrição de <strong>R$ 199,00</strong>.</span>
                         </li>
                         <li className="flex items-start">
                            <span className="bg-secondary rounded-full text-white text-xs font-bold w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">✓</span>
@@ -82,13 +87,12 @@ const RegisterPage: React.FC = () => {
 
                         {error && <p className="text-red-500 text-sm">{error}</p>}
                         
-                        {/* Placeholder for reCaptcha */}
                         <div className="w-full h-16 bg-gray-200 rounded-md flex items-center justify-center text-gray-500 text-sm">
                             reCAPTCHA Placeholder
                         </div>
 
                         <button type="submit" className="w-full bg-secondary text-white font-bold py-2 px-4 rounded-md hover:bg-emerald-600 transition-colors">
-                            Registrar
+                            Avançar para Pagamento
                         </button>
                     </form>
                     <p className="mt-6 text-center text-sm text-gray-600">

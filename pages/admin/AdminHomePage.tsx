@@ -1,17 +1,17 @@
 
 import React from 'react';
-import { MOCK_CANDIDATES, PARTIES } from '../../constants';
+import { MOCK_CANDIDATES } from '../../constants';
 import { useMaintenance } from '../../contexts/MaintenanceContext';
-import { DollarSign, Users, Clock, CheckCircle, AlertTriangle, Power } from 'lucide-react';
-import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { DollarSign, Users, Clock, CheckCircle, AlertTriangle, TrendingUp, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
+import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line } from 'recharts';
 
-const StatCard: React.FC<{ title: string; value: string; icon: React.ElementType }> = ({ title, value, icon: Icon }) => (
-    <div className="bg-white p-6 rounded-lg shadow-md flex items-center gap-4">
-        <div className="p-3 bg-primary/10 rounded-full text-primary">
+const StatCard: React.FC<{ title: string; value: string; icon: React.ElementType; color?: string }> = ({ title, value, icon: Icon, color = "text-primary" }) => (
+    <div className="bg-white p-6 rounded-lg shadow-md flex items-center gap-4 border-l-4 border-transparent hover:border-primary transition-all">
+        <div className={`p-3 rounded-full ${color.replace('text-', 'bg-')}/10 ${color}`}>
             <Icon size={24} />
         </div>
         <div>
-            <p className="text-sm text-gray-500">{title}</p>
+            <p className="text-sm text-gray-500 font-medium uppercase tracking-wide">{title}</p>
             <p className="text-2xl font-bold text-gray-900">{value}</p>
         </div>
     </div>
@@ -23,11 +23,20 @@ const AdminHomePage: React.FC = () => {
     const totalRaised = MOCK_CANDIDATES.reduce((total, candidate) => 
         total + candidate.donations.reduce((sum, d) => sum + d.amount, 0), 0);
 
+    // Mock outflow (saídas) for demonstration
+    const totalOutflow = totalRaised * 0.4; 
+
     const totalCandidates = MOCK_CANDIDATES.length;
     
-    // Mock data for withdrawals
-    const pendingWithdrawals = 3;
-    const completedWithdrawals = 12;
+    const financialData = [
+      { name: 'Jan', Entradas: 4000, Saidas: 2400 },
+      { name: 'Fev', Entradas: 3000, Saidas: 1398 },
+      { name: 'Mar', Entradas: 2000, Saidas: 9800 },
+      { name: 'Abr', Entradas: 2780, Saidas: 3908 },
+      { name: 'Mai', Entradas: 1890, Saidas: 4800 },
+      { name: 'Jun', Entradas: 2390, Saidas: 3800 },
+      { name: 'Jul', Entradas: 3490, Saidas: 4300 },
+    ];
 
     const candidatesByParty = MOCK_CANDIDATES.reduce((acc, candidate) => {
         const party = candidate.party.acronym;
@@ -38,80 +47,84 @@ const AdminHomePage: React.FC = () => {
     const pieChartData = Object.entries(candidatesByParty).map(([name, value]) => ({ name, value }));
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
-    const donationHistoryData = [
-      { name: 'Jan', Doações: 4000 },
-      { name: 'Fev', Doações: 3000 },
-      { name: 'Mar', Doações: 2000 },
-      { name: 'Abr', Doações: 2780 },
-      { name: 'Mai', Doações: 1890 },
-      { name: 'Jun', Doações: 2390 },
-      { name: 'Jul', Doações: 3490 },
-    ];
-
     return (
         <div>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">Dashboard Administrativo</h1>
-                    <p className="mt-1 text-gray-600">Visão geral da plataforma Vale Apoio.</p>
+                    <p className="mt-1 text-gray-600">Visão financeira e operacional completa.</p>
                 </div>
                 
-                {/* Controle do Modo Manutenção */}
-                <div className={`flex items-center gap-4 p-4 rounded-lg border ${isMaintenanceMode ? 'bg-yellow-50 border-yellow-200' : 'bg-white border-gray-200 shadow-sm'}`}>
+                <div className={`flex items-center gap-4 p-4 rounded-lg border transition-all ${isMaintenanceMode ? 'bg-yellow-50 border-yellow-200 shadow-md' : 'bg-white border-gray-200 shadow-sm'}`}>
                     <div className="flex flex-col">
                         <span className="text-sm font-bold text-gray-800 flex items-center gap-2">
                             {isMaintenanceMode ? <AlertTriangle size={16} className="text-yellow-600"/> : <CheckCircle size={16} className="text-green-500"/>}
                             Status do Site: {isMaintenanceMode ? 'EM MANUTENÇÃO' : 'NO AR'}
                         </span>
-                        <span className="text-xs text-gray-500">
-                            {isMaintenanceMode ? 'O público vê a página "Em Breve".' : 'O site está acessível a todos.'}
-                        </span>
                     </div>
                     <button 
                         onClick={toggleMaintenanceMode}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${isMaintenanceMode ? 'bg-yellow-500' : 'bg-gray-200'}`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${isMaintenanceMode ? 'bg-yellow-500' : 'bg-gray-200'}`}
                     >
-                        <span className="sr-only">Ativar Manutenção</span>
-                        <span
-                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isMaintenanceMode ? 'translate-x-6' : 'translate-x-1'}`}
-                        />
+                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isMaintenanceMode ? 'translate-x-6' : 'translate-x-1'}`} />
                     </button>
                 </div>
             </div>
 
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatCard title="Total Arrecadado" value={totalRaised.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} icon={DollarSign} />
+            {/* Top Stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <StatCard title="Arrecadação Total" value={totalRaised.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} icon={ArrowUpCircle} color="text-green-600" />
+                <StatCard title="Saídas Totais" value={totalOutflow.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} icon={ArrowDownCircle} color="text-red-500" />
                 <StatCard title="Candidatos Ativos" value={totalCandidates.toString()} icon={Users} />
-                <StatCard title="Saques Pendentes" value={pendingWithdrawals.toString()} icon={Clock} />
-                <StatCard title="Saques Concluídos" value={completedWithdrawals.toString()} icon={CheckCircle} />
+                <StatCard title="Saldo na Plataforma" value={(totalRaised - totalOutflow).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} icon={DollarSign} color="text-blue-600" />
             </div>
 
-            <div className="mt-8 grid grid-cols-1 lg:grid-cols-5 gap-8">
-                <div className="lg:col-span-3 bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-bold mb-4">Volume de Doações (Mensal)</h2>
-                    <div style={{ width: '100%', height: 300 }}>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Financial Chart */}
+                <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                    <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                        <TrendingUp size={20} className="text-gray-500"/> Entradas vs Saídas (2026)
+                    </h2>
+                    <div style={{ width: '100%', height: 350 }}>
                         <ResponsiveContainer>
-                            <RechartsBarChart data={donationHistoryData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                            <RechartsBarChart data={financialData}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
                                 <XAxis dataKey="name" axisLine={false} tickLine={false} />
                                 <YAxis axisLine={false} tickLine={false} tickFormatter={(value) => `R$${value/1000}k`} />
-                                <Tooltip cursor={{fill: 'rgba(99, 102, 241, 0.1)'}} contentStyle={{ borderRadius: '0.5rem', border: '1px solid #e2e8f0' }} formatter={(value: number) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} />
-                                <Bar dataKey="Doações" fill="#6366F1" radius={[4, 4, 0, 0]} />
+                                <Tooltip 
+                                    cursor={{fill: 'rgba(0,0,0,0.05)'}}
+                                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} 
+                                    formatter={(value: number) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} 
+                                />
+                                <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                                <Bar dataKey="Entradas" fill="#10B981" radius={[4, 4, 0, 0]} name="Arrecadação" />
+                                <Bar dataKey="Saidas" fill="#EF4444" radius={[4, 4, 0, 0]} name="Saques/Custos" />
                             </RechartsBarChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
 
-                <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-bold mb-4">Candidatos por Partido</h2>
-                    <div style={{ width: '100%', height: 300 }}>
+                {/* Distribution Chart */}
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                    <h2 className="text-xl font-bold mb-4">Distribuição Partidária</h2>
+                    <div style={{ width: '100%', height: 350 }}>
                         <ResponsiveContainer>
                              <PieChart>
-                                <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" labelLine={false} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+                                <Pie 
+                                    data={pieChartData} 
+                                    dataKey="value" 
+                                    nameKey="name" 
+                                    cx="50%" 
+                                    cy="50%" 
+                                    innerRadius={60}
+                                    outerRadius={100} 
+                                    fill="#8884d8" 
+                                    labelLine={false}
+                                >
                                     {pieChartData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                                 </Pie>
-                                <Tooltip />
-                                <Legend />
+                                <Tooltip formatter={(value) => `${value} Candidatos`} />
+                                <Legend layout="vertical" verticalAlign="middle" align="right" />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
