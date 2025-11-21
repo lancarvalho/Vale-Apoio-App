@@ -35,6 +35,7 @@ import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 import CloudComparison from './components/CloudComparison';
 import SitemapView from './components/SitemapView';
 import RoadmapView from './components/RoadmapView';
+import ScrollToTop from './components/ScrollToTop';
 
 const App: React.FC = () => {
   return (
@@ -42,6 +43,7 @@ const App: React.FC = () => {
       <MaintenanceProvider>
         <AuthProvider>
           <HashRouter>
+            <ScrollToTop />
             <Routes>
               
               {/* Rotas Públicas - Protegidas pelo Modo Manutenção */}

@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Mail, MessageCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Mail, MessageCircle, CheckCircle, Send } from 'lucide-react';
 import { useConfig } from '../contexts/ConfigContext';
 
 const FaqItem: React.FC<{ question: string; children: React.ReactNode }> = ({ question, children }) => (
@@ -29,6 +29,19 @@ const FaqSection: React.FC<{title: string; children: React.ReactNode}> = ({ titl
 
 const HelpPage: React.FC = () => {
     const { config } = useConfig();
+    const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setFormStatus('sending');
+        
+        // Simula envio
+        setTimeout(() => {
+            setFormStatus('sent');
+            // Reset após alguns segundos
+            setTimeout(() => setFormStatus('idle'), 5000);
+        }, 1500);
+    };
 
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -40,25 +53,54 @@ const HelpPage: React.FC = () => {
                     <p className="mt-4 text-gray-600">
                         Envie sua mensagem por e-mail pelo formulário abaixo, ou se preferir, chame a gente pelo WhatsApp no botãozinho verde no canto direito inferior ;)
                     </p>
-                    <form className="mt-8 space-y-4">
-                        <input type="text" placeholder="Nome Completo" className="w-full p-3 border rounded-md focus:ring-2 focus:ring-primary"/>
-                        <input type="email" placeholder="E-mail" className="w-full p-3 border rounded-md focus:ring-2 focus:ring-primary"/>
-                        <select className="w-full p-3 border rounded-md focus:ring-2 focus:ring-primary bg-white text-gray-500">
-                            <option>Selecione um assunto</option>
-                            <option>Dificuldades técnicas</option>
-                            <option>Dúvidas sobre doações</option>
-                            <option>Financeiro</option>
-                            <option>Parcerias</option>
-                        </select>
-                        <textarea placeholder="Mensagem" rows={5} className="w-full p-3 border rounded-md focus:ring-2 focus:ring-primary"></textarea>
-                        <button type="submit" className="w-full bg-primary text-white font-bold py-3 rounded-md hover:bg-indigo-700 transition-colors">
-                            Enviar Mensagem
-                        </button>
-                    </form>
+                    
+                    {formStatus === 'sent' ? (
+                        <div className="mt-8 p-8 bg-green-50 border border-green-200 rounded-lg text-center animate-fadeIn">
+                            <div className="inline-flex p-3 bg-green-100 rounded-full text-green-600 mb-4">
+                                <CheckCircle size={32} />
+                            </div>
+                            <h3 className="text-xl font-bold text-green-800 mb-2">Mensagem Enviada!</h3>
+                            <p className="text-green-700">Obrigado pelo contato. Nossa equipe responderá em breve no seu e-mail.</p>
+                            <button 
+                                onClick={() => setFormStatus('idle')}
+                                className="mt-6 text-sm font-medium text-green-700 hover:underline"
+                            >
+                                Enviar outra mensagem
+                            </button>
+                        </div>
+                    ) : (
+                        <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+                            <input required type="text" placeholder="Nome Completo" className="w-full p-3 border rounded-md focus:ring-2 focus:ring-primary"/>
+                            <input required type="email" placeholder="E-mail" className="w-full p-3 border rounded-md focus:ring-2 focus:ring-primary"/>
+                            <select className="w-full p-3 border rounded-md focus:ring-2 focus:ring-primary bg-white text-gray-500">
+                                <option>Selecione um assunto</option>
+                                <option>Dificuldades técnicas</option>
+                                <option>Dúvidas sobre doações</option>
+                                <option>Financeiro</option>
+                                <option>Parcerias</option>
+                            </select>
+                            <textarea required placeholder="Mensagem" rows={5} className="w-full p-3 border rounded-md focus:ring-2 focus:ring-primary"></textarea>
+                            <button 
+                                type="submit" 
+                                disabled={formStatus === 'sending'}
+                                className="w-full bg-primary text-white font-bold py-3 rounded-md hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
+                            >
+                                {formStatus === 'sending' ? 'Enviando...' : <>Enviar Mensagem <Send size={18} /></>}
+                            </button>
+                        </form>
+                    )}
+
                     <div className="mt-8">
                         <h3 className="font-semibold text-lg">Assista nosso vídeo com as principais perguntas.</h3>
-                        <div className="mt-4 aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-                            <p className="text-gray-500">Player de Vídeo</p>
+                        <div className="mt-4 aspect-video bg-gray-200 rounded-lg flex items-center justify-center relative overflow-hidden group cursor-pointer">
+                            <img 
+                                src="https://horizons-cdn.hostinger.com/ee1fec56-56e3-4bfc-a3ed-03c9f212598d/banner2-k8aOB.jpg" 
+                                alt="Thumbnail Video" 
+                                className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500" 
+                            />
+                            <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center z-10 shadow-lg group-hover:bg-white transition-colors">
+                                <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-primary border-b-[10px] border-b-transparent ml-1"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -132,7 +174,7 @@ const HelpPage: React.FC = () => {
                 </div>
             </div>
              {/* Floating WhatsApp button */}
-            <a href={`https://wa.me/${config.whatsapp}`} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 bg-green-500 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 transition-transform hover:scale-110" aria-label="Fale conosco no WhatsApp">
+            <a href={`https://wa.me/${config.whatsapp}`} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 bg-green-500 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 transition-transform hover:scale-110 z-50 border-2 border-white" aria-label="Fale conosco no WhatsApp">
                 <MessageCircle size={28} />
             </a>
         </div>
