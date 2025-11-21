@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CheckCircle, XCircle, Cloud, Server } from 'lucide-react';
 import Logo from './Logo';
@@ -9,8 +8,8 @@ const CloudComparison: React.FC = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen p-8 text-gray-800 font-sans">
-      <div className="max-w-4xl mx-auto border border-gray-200 shadow-lg p-10 bg-white print:shadow-none print:border-none">
+    <div className="bg-white p-8 text-gray-800 font-sans print:p-0">
+      <div className="max-w-4xl mx-auto border border-gray-200 shadow-lg p-10 bg-white print:shadow-none print:border-none print:p-0">
         
         {/* Header do Documento */}
         <div className="flex justify-between items-center mb-10 border-b pb-6">

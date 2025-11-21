@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Calendar, Shield, Rocket, CheckCircle, Server, FileText, Flag } from 'lucide-react';
 import Logo from './Logo';
@@ -61,7 +60,7 @@ const RoadmapView: React.FC = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen p-8 text-gray-800 font-sans">
+    <div className="bg-white p-8 text-gray-800 font-sans print:p-0">
       <div className="max-w-4xl mx-auto border border-gray-200 shadow-xl p-12 bg-white print:shadow-none print:border-none print:p-0">
         
         {/* Header */}

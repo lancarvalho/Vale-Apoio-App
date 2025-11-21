@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Globe, Lock, Users, User, ShieldCheck, Layout, FileText, Share2, DollarSign, Settings, Database, Server } from 'lucide-react';
 import Logo from './Logo';
@@ -43,7 +42,7 @@ const SitemapView: React.FC = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen p-8 text-gray-800 font-sans">
+    <div className="bg-white p-8 text-gray-800 font-sans print:p-0">
       <div className="max-w-5xl mx-auto border border-gray-200 shadow-xl p-10 bg-white print:shadow-none print:border-none print:p-0">
         
         {/* Header do Documento */}

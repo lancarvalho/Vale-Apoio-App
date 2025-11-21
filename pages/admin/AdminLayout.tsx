@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -102,10 +101,12 @@ const AdminLayout: React.FC = () => {
     }
     
     return (
-        <div className="flex h-screen bg-gray-100">
-            <AdminSidebar isOpen={sidebarOpen} toggle={() => setSidebarOpen(!sidebarOpen)} />
-            <div className="flex-1 flex flex-col overflow-hidden">
-                <header className="flex items-center justify-between bg-white h-16 px-4 border-b shadow-sm z-10">
+        <div className="flex h-screen bg-gray-100 print:h-auto print:block">
+            <div className="print:hidden">
+                <AdminSidebar isOpen={sidebarOpen} toggle={() => setSidebarOpen(!sidebarOpen)} />
+            </div>
+            <div className="flex-1 flex flex-col overflow-hidden print:overflow-visible print:h-auto">
+                <header className="flex items-center justify-between bg-white h-16 px-4 border-b shadow-sm z-10 print:hidden">
                     <div className="flex items-center gap-4">
                          <button onClick={() => setSidebarOpen(true)} className="md:hidden text-gray-600">
                             <Menu size={24} />
@@ -142,7 +143,7 @@ const AdminLayout: React.FC = () => {
                         </div>
                     </div>
                 </header>
-                <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 lg:p-8 bg-gray-50">
+                <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 lg:p-8 bg-gray-50 print:overflow-visible print:h-auto print:p-0 print:bg-white">
                     <Outlet />
                 </main>
             </div>
