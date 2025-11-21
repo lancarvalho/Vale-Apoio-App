@@ -35,13 +35,14 @@ const RegisterPage: React.FC = () => {
             email, 
             cpf, 
             type: 'candidate' as const,
-            pendingPayment: true 
+            pendingPayment: true, // Flag crítica para abrir o modal no painel
+            photoUrl: 'https://ui-avatars.com/api/?name=' + name.replace(' ', '+') + '&background=6366F1&color=fff'
         };
         
         login(mockUser);
         
-        // Redirect to Payment Page
-        navigate('/pagamento-inscricao');
+        // Redirect directly to Dashboard, where the Payment Modal will intercept
+        navigate('/painel');
     };
 
     return (
@@ -88,11 +89,11 @@ const RegisterPage: React.FC = () => {
                         {error && <p className="text-red-500 text-sm">{error}</p>}
                         
                         <div className="w-full h-16 bg-gray-200 rounded-md flex items-center justify-center text-gray-500 text-sm">
-                            reCAPTCHA Placeholder
+                            reCAPTCHA (Simulado)
                         </div>
 
                         <button type="submit" className="w-full bg-secondary text-white font-bold py-2 px-4 rounded-md hover:bg-emerald-600 transition-colors">
-                            Avançar para Pagamento
+                            Avançar
                         </button>
                     </form>
                     <p className="mt-6 text-center text-sm text-gray-600">

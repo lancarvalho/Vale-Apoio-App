@@ -19,6 +19,7 @@ import DashboardHomePage from './pages/dashboard/DashboardHomePage';
 import DashboardWithdrawalsPage from './pages/dashboard/DashboardWithdrawalsPage';
 import DashboardReportsPage from './pages/dashboard/DashboardReportsPage';
 import DashboardProfilePage from './pages/dashboard/DashboardProfilePage';
+import DashboardBiographyPage from './pages/dashboard/DashboardBiographyPage';
 import PublicLayout from './components/PublicLayout';
 import MaintenanceGuard from './components/MaintenanceGuard';
 
@@ -26,9 +27,9 @@ import AdminLayout from './pages/admin/AdminLayout';
 import AdminHomePage from './pages/admin/AdminHomePage';
 import AdminCandidatesPage from './pages/admin/AdminCandidatesPage';
 import AdminWithdrawalsPage from './pages/admin/AdminWithdrawalsPage';
-import AdminDonationsPage from './pages/admin/AdminDonationsPage'; // Nova página
-import AdminTSEReportsPage from './pages/admin/AdminTSEReportsPage'; // Nova página
-import AdminAuditPage from './pages/admin/AdminAuditPage'; // Nova página
+import AdminDonationsPage from './pages/admin/AdminDonationsPage';
+import AdminTSEReportsPage from './pages/admin/AdminTSEReportsPage';
+import AdminAuditPage from './pages/admin/AdminAuditPage';
 
 const App: React.FC = () => {
   return (
@@ -65,6 +66,7 @@ const App: React.FC = () => {
               <Route path="saques" element={<DashboardWithdrawalsPage />} />
               <Route path="comprovantes-tse" element={<DashboardReportsPage />} />
               <Route path="perfil" element={<DashboardProfilePage />} />
+              <Route path="biografia" element={<DashboardBiographyPage />} />
             </Route>
 
             {/* Rotas Admin */}
