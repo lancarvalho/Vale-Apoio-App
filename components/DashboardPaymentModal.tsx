@@ -56,7 +56,7 @@ const DashboardPaymentModal: React.FC = () => {
         <div className="bg-white p-6 border-b border-gray-100 flex flex-col items-center text-center">
            <Logo />
            <h2 className="text-xl font-medium text-gray-600 mt-4">Confirme os dados para taxa de inscrição:</h2>
-           <p className="text-4xl font-bold text-gray-900 mt-2">R$ 199,00</p>
+           <p className="text-4xl font-bold text-gray-900 mt-2">R$ 189,00</p>
         </div>
 
         {/* Steps Indicator */}

@@ -2,10 +2,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useConfig } from '../contexts/ConfigContext';
 import Logo from '../components/Logo';
 
 const RegisterPage: React.FC = () => {
     const [name, setName] = useState('');
+    const [urnName, setUrnName] = useState(''); 
     const [cpf, setCpf] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -14,6 +16,7 @@ const RegisterPage: React.FC = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const { login } = useAuth();
+    const { config } = useConfig();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,20 +31,24 @@ const RegisterPage: React.FC = () => {
             return;
         }
         
-        // Create user with pending payment status
+        const slug = urnName
+            .toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
+            .replace(/[^a-z0-9 ]/g, "") 
+            .replace(/\s+/g, "-"); 
+
         const mockUser = { 
             id: Date.now(), 
             name, 
+            slug, 
             email, 
             cpf, 
             type: 'candidate' as const,
-            pendingPayment: true, // Flag crítica para abrir o modal no painel
-            photoUrl: 'https://ui-avatars.com/api/?name=' + name.replace(' ', '+') + '&background=6366F1&color=fff'
+            pendingPayment: true, 
+            photoUrl: 'https://ui-avatars.com/api/?name=' + urnName.replace(' ', '+') + '&background=6366F1&color=fff'
         };
         
         login(mockUser);
-        
-        // Redirect directly to Dashboard, where the Payment Modal will intercept
         navigate('/painel');
     };
 
@@ -56,11 +63,11 @@ const RegisterPage: React.FC = () => {
                     <ul className="mt-6 space-y-4">
                         <li className="flex items-start">
                             <span className="bg-secondary rounded-full text-white text-xs font-bold w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">✓</span>
-                            <span><strong>Taxa de 3,65%</strong> em cada doação recebida.</span>
+                            <span><strong>Taxa de {config.transactionFee}%</strong> em cada doação recebida.</span>
                         </li>
                         <li className="flex items-start">
                             <span className="bg-secondary rounded-full text-white text-xs font-bold w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">✓</span>
-                            <span>Taxa única de inscrição de <strong>R$ 199,00</strong>.</span>
+                            <span>Taxa única de inscrição de <strong>R$ {config.registrationFee}</strong>.</span>
                         </li>
                         <li className="flex items-start">
                            <span className="bg-secondary rounded-full text-white text-xs font-bold w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">✓</span>
@@ -73,11 +80,28 @@ const RegisterPage: React.FC = () => {
                         <Logo />
                     </div>
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        <input type="text" placeholder="Nome completo" value={name} onChange={e => setName(e.target.value)} required className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
+                        <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Nome Completo (Civil)</label>
+                            <input type="text" placeholder="Ex: José Carlos Rodrigues" value={name} onChange={e => setName(e.target.value)} required className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
+                        </div>
+                        
+                        <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Nome de Urna (Como aparecerá na URL)</label>
+                            <input type="text" placeholder="Ex: Zé da Padaria" value={urnName} onChange={e => setUrnName(e.target.value)} required className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
+                            {urnName && (
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Sua URL será: valeapoio.com.br/candidatos/<strong>{urnName.toLowerCase().replace(/\s+/g, "-").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9-]/g, "")}</strong>
+                                </p>
+                            )}
+                        </div>
+
                         <input type="text" placeholder="CPF (apenas números)" value={cpf} onChange={e => setCpf(e.target.value.replace(/\D/g, ''))} required className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
                         <input type="email" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)} required className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
-                        <input type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)} required className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
-                        <input type="password" placeholder="Confirme a senha" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                            <input type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)} required className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
+                            <input type="password" placeholder="Confirme a senha" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
+                        </div>
                         
                         <div className="flex items-center">
                             <input type="checkbox" id="terms" checked={agreed} onChange={e => setAgreed(e.target.checked)} className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded" />

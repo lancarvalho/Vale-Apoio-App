@@ -4,6 +4,7 @@ import { MOCK_CANDIDATES } from '../../constants';
 import { Candidate, PaymentStatus, TSEStatus } from '../../types';
 import { Search, Eye, Edit, AlertTriangle, CheckCircle, XCircle, RefreshCw, Search as SearchIcon, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import VerificationBadges from '../../components/VerificationBadges';
 
 // Componente de Badge para Status de Pagamento
 const PaymentStatusBadge: React.FC<{ status: PaymentStatus }> = ({ status }) => {
@@ -46,16 +47,8 @@ const AdminCandidatesPage: React.FC = () => {
         setTimeout(() => {
             setCandidates(prev => prev.map(c => {
                 if (c.id === id) {
-                    // Sorteia um status para demonstração se for "Aguardando", senão mantém ou alterna
-                    const statuses: TSEStatus[] = ['Deferida', 'Deferida com Recurso', 'Indeferida'];
-                    const newStatus = c.tseStatus === 'Aguardando' 
-                        ? statuses[Math.floor(Math.random() * statuses.length)] 
-                        : c.tseStatus; // Mantém se já tiver status final para não ficar mudando na demo
-                    
-                    // Demo override: Se clicar em Deferida, vira Indeferida para testar a devolução, e vice-versa
                     const toggleStatus = c.tseStatus === 'Deferida' ? 'Indeferida' : 'Deferida';
-                    
-                    return { ...c, tseStatus: c.tseStatus === 'Aguardando' ? newStatus : toggleStatus };
+                    return { ...c, tseStatus: c.tseStatus === 'Aguardando' ? 'Deferida' : toggleStatus };
                 }
                 return c;
             }));
@@ -65,20 +58,21 @@ const AdminCandidatesPage: React.FC = () => {
 
     const handleActivate = (id: number) => {
         if(window.confirm('Confirmar pagamento e ativar conta manualmente?')) {
-            setCandidates(prev => prev.map(c => c.id === id ? { ...c, paymentStatus: 'Ativo' } : c));
+            // Atualiza o estado local imediatamente
+            setCandidates(prev => prev.map(c => c.id === id ? { ...c, paymentStatus: 'Ativo' as PaymentStatus } : c));
         }
     };
 
     const handleReject = (id: number) => {
         if(window.confirm('Tem certeza que deseja rejeitar este cadastro?')) {
-            setCandidates(prev => prev.map(c => c.id === id ? { ...c, paymentStatus: 'Rejeitado' } : c));
+            // Atualiza o estado local imediatamente
+            setCandidates(prev => prev.map(c => c.id === id ? { ...c, paymentStatus: 'Rejeitado' as PaymentStatus } : c));
         }
     };
 
     // Calcula total a devolver para candidatos indeferidos
     const calculateRefund = (candidate: Candidate) => {
         const total = candidate.donations.reduce((acc, d) => acc + d.amount, 0);
-        // Supondo que taxas já foram descontadas ou serão descontadas na devolução
         return total;
     };
 
@@ -127,7 +121,17 @@ const AdminCandidatesPage: React.FC = () => {
                                     <tr className="hover:bg-gray-50 transition-colors">
                                         <td className="p-6">
                                             <div className="flex items-center gap-4">
-                                                <img src={c.photoUrl} alt={c.name} className="w-12 h-12 rounded-full object-cover border-2 border-gray-100 shadow-sm"/>
+                                                <div className="relative">
+                                                    <img src={c.photoUrl} alt={c.name} className="w-12 h-12 rounded-full object-cover border-2 border-gray-100 shadow-sm"/>
+                                                    <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5">
+                                                        <VerificationBadges 
+                                                            paymentStatus={c.paymentStatus} 
+                                                            tseStatus={c.tseStatus} 
+                                                            hasBio={!!c.description} 
+                                                            size={12}
+                                                        />
+                                                    </div>
+                                                </div>
                                                 <div>
                                                     <p className="font-bold text-gray-900">{c.name}</p>
                                                     <p className="text-sm text-gray-500">{c.party.acronym} • {c.campaignCnpj}</p>

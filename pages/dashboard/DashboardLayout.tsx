@@ -2,9 +2,11 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useConfig } from '../../contexts/ConfigContext';
 import Logo from '../../components/Logo';
-import { Home, DollarSign, FileText, User, HelpCircle, LogOut, Menu, X, Image as ImageIcon, ArrowLeft } from 'lucide-react';
+import { Home, DollarSign, FileText, User, HelpCircle, LogOut, Menu, X, Image as ImageIcon, ArrowLeft, MessageCircle, Bell, Clock } from 'lucide-react';
 import DashboardPaymentModal from '../../components/DashboardPaymentModal';
+import VerificationBadges from '../../components/VerificationBadges';
 
 const navItems = [
     { name: 'Início / Minhas Vaquinhas', path: '/painel', icon: Home },
@@ -36,7 +38,12 @@ const Sidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({ isOpen, to
                 <nav className="flex-1 py-6 px-4 space-y-2">
                     {navItems.map(item =>
                         item.external ? (
-                             <Link key={item.name} to={item.path} className="flex items-center gap-3 px-4 py-3 text-gray-600 rounded-lg hover:bg-gray-50 hover:text-primary transition-all group">
+                             <Link 
+                                key={item.name} 
+                                to={item.path} 
+                                onClick={toggle} // Fecha sidebar no mobile ao clicar
+                                className="flex items-center gap-3 px-4 py-3 text-gray-600 rounded-lg hover:bg-gray-50 hover:text-primary transition-all group"
+                            >
                                 <item.icon size={20} className="group-hover:scale-110 transition-transform" />
                                 <span className="font-medium">{item.name}</span>
                             </Link>
@@ -45,6 +52,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({ isOpen, to
                                 key={item.name}
                                 to={item.path}
                                 end={item.path === '/painel'}
+                                onClick={toggle} // Fecha sidebar no mobile ao clicar
                                 className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all group ${isActive ? 'bg-primary text-white shadow-md shadow-primary/20' : 'text-gray-600 hover:bg-gray-50 hover:text-primary'}`}
                             >
                                 <item.icon size={20} className="group-hover:scale-110 transition-transform" />
@@ -68,6 +76,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({ isOpen, to
 
 const DashboardLayout: React.FC = () => {
     const { user, logout } = useAuth();
+    const { config } = useConfig();
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -75,40 +84,73 @@ const DashboardLayout: React.FC = () => {
         return <div className="p-8">Acesso negado. Faça login como candidato. <NavLink to="/acessar" className="text-primary underline">Login</NavLink></div>;
     }
     
+    const createdAt = new Date().toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'});
+    const mockTseStatus = 'Aguardando'; 
+    const mockPaymentStatus = user.pendingPayment ? 'Pendente' : 'Ativo';
+    const hasBio = !!user.description;
+
     return (
         <div className="flex h-screen bg-gray-100">
             <Sidebar isOpen={sidebarOpen} toggle={() => setSidebarOpen(!sidebarOpen)} />
             <div className="flex-1 flex flex-col overflow-hidden relative">
-                {/* Header Candidato */}
-                <header className="bg-white h-16 px-4 sm:px-8 border-b shadow-sm flex items-center justify-between z-10">
+                <header className={`${user.pendingPayment ? 'bg-[#6366F1] text-white' : 'bg-white text-gray-800'} h-20 px-4 sm:px-8 border-b shadow-sm flex items-center justify-between z-20 transition-colors duration-300`}>
                     <div className="flex items-center gap-4">
-                        <button onClick={() => setSidebarOpen(true)} className="md:hidden text-gray-600">
+                        <button onClick={() => setSidebarOpen(true)} className={`md:hidden ${user.pendingPayment ? 'text-white' : 'text-gray-600'}`}>
                             <Menu size={24} />
                         </button>
-                        <h2 className="text-xl font-semibold text-gray-800 hidden sm:block">Painel do Candidato</h2>
+                        <h2 className={`text-xl font-semibold hidden lg:block ${user.pendingPayment ? 'text-white' : 'text-gray-800'}`}>Painel do Candidato</h2>
                     </div>
 
+                    {user.pendingPayment && (
+                        <div className="flex flex-col items-center justify-center absolute left-1/2 transform -translate-x-1/2 w-full sm:w-auto text-center">
+                            <div className="flex items-center gap-2 font-bold uppercase tracking-wide text-sm sm:text-base">
+                                <Clock size={18} className="animate-pulse text-yellow-300"/>
+                                <span>PIX GERADO - PENDENTE</span>
+                            </div>
+                            <span className="text-xs text-indigo-100">criado em: {createdAt}</span>
+                        </div>
+                    )}
+
                     <div className="flex items-center gap-4 sm:gap-6">
-                         <Link to="/" className="text-sm font-medium text-gray-600 hover:text-primary flex items-center gap-2">
+                         <Link to="/" className={`text-sm font-medium flex items-center gap-2 ${user.pendingPayment ? 'text-indigo-100 hover:text-white' : 'text-gray-600 hover:text-primary'} hidden sm:flex`}>
                             <ArrowLeft size={16} />
-                            <span className="hidden sm:inline">Voltar para o Site</span>
+                            <span>Voltar para o Site</span>
                         </Link>
-                        <div className="h-8 w-px bg-gray-200"></div>
+
+                        <button className={`relative p-2 rounded-full hover:bg-white/10 transition-colors ${user.pendingPayment ? 'text-white' : 'text-gray-500 hover:text-primary'}`}>
+                            <Bell size={22} />
+                            {user.pendingPayment && (
+                                <span className="absolute top-1.5 right-1.5 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white animate-pulse"></span>
+                            )}
+                        </button>
+
+                        <div className={`h-8 w-px ${user.pendingPayment ? 'bg-indigo-400' : 'bg-gray-200'}`}></div>
+                        
                         <div className="flex items-center gap-3">
                             <div className="text-right hidden sm:block">
-                                <p className="text-sm font-bold text-gray-900">{user.name}</p>
-                                <p className="text-xs text-gray-500">Candidato</p>
+                                <div className="flex items-center justify-end gap-1">
+                                    <p className={`text-sm font-bold ${user.pendingPayment ? 'text-white' : 'text-gray-900'}`}>{user.name}</p>
+                                    {!user.pendingPayment && (
+                                        <VerificationBadges 
+                                            paymentStatus={mockPaymentStatus} 
+                                            tseStatus={mockTseStatus} 
+                                            hasBio={hasBio} 
+                                            size={14}
+                                        />
+                                    )}
+                                </div>
+                                <p className={`text-xs ${user.pendingPayment ? 'text-indigo-200' : 'text-gray-500'}`}>Candidato</p>
                             </div>
-                            <div className="w-10 h-10 rounded-full bg-primary/10 border-2 border-primary/20 overflow-hidden">
+                            <div className={`w-10 h-10 rounded-full border-2 overflow-hidden ${user.pendingPayment ? 'bg-indigo-800 border-indigo-300' : 'bg-primary/10 border-primary/20'}`}>
                                 {user.photoUrl ? (
                                     <img src={user.photoUrl} alt={user.name} className="w-full h-full object-cover" />
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-primary">
+                                    <div className={`w-full h-full flex items-center justify-center ${user.pendingPayment ? 'text-white' : 'text-primary'}`}>
                                         <User size={20} />
                                     </div>
                                 )}
                             </div>
-                            <button onClick={() => { logout(); navigate('/'); }} className="text-gray-400 hover:text-red-500 transition-colors sm:hidden">
+                            <button onClick={() => { logout(); navigate('/'); }} className={`${user.pendingPayment ? 'text-indigo-200 hover:text-white' : 'text-gray-400 hover:text-red-500'} transition-colors sm:hidden`}>
                                 <LogOut size={20} />
                             </button>
                         </div>
@@ -119,7 +161,16 @@ const DashboardLayout: React.FC = () => {
                     <Outlet />
                 </main>
 
-                {/* Modal de Pagamento Bloqueante */}
+                <a 
+                    href={`https://wa.me/${config.whatsapp}`} 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="fixed bottom-6 right-6 bg-[#25D366] text-white w-16 h-16 rounded-full shadow-xl flex items-center justify-center hover:bg-green-600 transition-all hover:scale-110 z-50 border-2 border-white" 
+                    aria-label="Fale conosco no WhatsApp"
+                >
+                    <MessageCircle size={32} />
+                </a>
+
                 <DashboardPaymentModal />
             </div>
         </div>

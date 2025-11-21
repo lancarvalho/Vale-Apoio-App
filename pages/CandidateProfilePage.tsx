@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { MOCK_CANDIDATES } from '../constants';
-import { Share2, Heart, Users, DollarSign } from 'lucide-react';
+import { Share2, Heart, Users, DollarSign, Check } from 'lucide-react';
+import VerificationBadges from '../components/VerificationBadges';
 
 const DonationWidget: React.FC<{ onDonate: (amount: number, method: string) => void }> = ({ onDonate }) => {
     const [amount, setAmount] = useState(50);
@@ -58,6 +59,8 @@ const DonationWidget: React.FC<{ onDonate: (amount: number, method: string) => v
 const CandidateProfilePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [shareSuccess, setShareSuccess] = useState(false);
+  
   const candidate = MOCK_CANDIDATES.find(c => c.slug === slug);
 
   if (!candidate) {
@@ -74,6 +77,27 @@ const CandidateProfilePage: React.FC = () => {
     setTimeout(() => setShowSuccess(false), 5000);
   };
 
+  const handleShare = async () => {
+    const shareData = {
+        title: `Apoie ${candidate.name}`,
+        text: `Estou apoiando ${candidate.name} nas eleições de 2026. Venha apoiar também!`,
+        url: window.location.href
+    };
+
+    if (navigator.share) {
+        try {
+            await navigator.share(shareData);
+        } catch (err) {
+            console.error('Error sharing:', err);
+        }
+    } else {
+        // Fallback for browsers without native share (copy to clipboard)
+        navigator.clipboard.writeText(window.location.href);
+        setShareSuccess(true);
+        setTimeout(() => setShareSuccess(false), 2000);
+    }
+  };
+
 
   return (
     <div className="bg-gray-50">
@@ -84,10 +108,24 @@ const CandidateProfilePage: React.FC = () => {
                     <div className="flex flex-col sm:flex-row items-start gap-6">
                         <img src={candidate.photoUrl} alt={candidate.name} className="w-32 h-32 sm:w-48 sm:h-48 rounded-full object-cover border-4 border-primary shadow-lg" />
                         <div>
-                            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900">{candidate.name}</h1>
-                            <p className="text-xl font-semibold text-primary">{candidate.party.acronym} - {candidate.city}/{candidate.state}</p>
-                            <button className="mt-4 inline-flex items-center gap-2 px-4 py-2 text-sm text-gray-600 border rounded-full hover:bg-gray-100">
-                                <Share2 size={16} /> Compartilhar Campanha
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900">{candidate.name}</h1>
+                                {/* Selos de Verificação - Tamanho Grande */}
+                                <VerificationBadges 
+                                    paymentStatus={candidate.paymentStatus} 
+                                    tseStatus={candidate.tseStatus} 
+                                    hasBio={!!candidate.description} 
+                                    size={28}
+                                    showLabels={true}
+                                />
+                            </div>
+                            <p className="text-xl font-semibold text-primary mt-1">{candidate.party.acronym} - {candidate.city}/{candidate.state}</p>
+                            <button 
+                                onClick={handleShare}
+                                className="mt-4 inline-flex items-center gap-2 px-4 py-2 text-sm text-gray-600 border rounded-full hover:bg-gray-100 transition-colors"
+                            >
+                                {shareSuccess ? <Check size={16} className="text-green-600" /> : <Share2 size={16} />} 
+                                {shareSuccess ? 'Link Copiado!' : 'Compartilhar Campanha'}
                             </button>
                         </div>
                     </div>
@@ -97,7 +135,7 @@ const CandidateProfilePage: React.FC = () => {
                     </div>
 
                     {showSuccess && (
-                        <div className="mt-8 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-md">
+                        <div className="mt-8 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-md animate-fadeIn">
                             <h4 className="font-bold">Obrigado pelo seu apoio!</h4>
                             <p>Sua doação foi registrada. O recibo foi enviado para seu e-mail e está disponível no seu painel de doador.</p>
                         </div>
@@ -109,7 +147,7 @@ const CandidateProfilePage: React.FC = () => {
                     <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
                          <h3 className="font-bold text-lg mb-4">Meta de Arrecadação</h3>
                          <div className="w-full bg-gray-200 rounded-full h-4">
-                            <div className="bg-secondary h-4 rounded-full" style={{ width: `${progress}%` }}></div>
+                            <div className="bg-secondary h-4 rounded-full transition-all duration-1000" style={{ width: `${progress}%` }}></div>
                          </div>
                          <div className="flex justify-between mt-2 text-sm font-medium">
                             <span className="text-secondary">{totalRaised.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>

@@ -1,14 +1,14 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Campaign } from '../../types';
-import { PlusCircle, Edit, Eye, AlertCircle, Search } from 'lucide-react';
+import { PlusCircle, Edit, Eye, AlertCircle, Search, Trash2 } from 'lucide-react';
 
 const DashboardHomePage: React.FC = () => {
     const { user } = useAuth();
     
-    // Mock Campaigns for the table
-    const myCampaigns: Campaign[] = [
+    // Mock Campaigns for the table with state to allow adding new ones
+    const [myCampaigns, setMyCampaigns] = useState<Campaign[]>([
         { 
             id: 1, 
             title: `Campanha ${user?.name}`, 
@@ -19,7 +19,7 @@ const DashboardHomePage: React.FC = () => {
             endDate: '02/10/2026',
             type: 'Majoritária'
         }
-    ];
+    ]);
 
     const getStatusStyle = (status: string) => {
         switch(status) {
@@ -30,6 +30,36 @@ const DashboardHomePage: React.FC = () => {
         }
     };
 
+    const handleNewCampaign = () => {
+        const newId = myCampaigns.length + 1;
+        const newCampaign: Campaign = {
+            id: newId,
+            title: `Nova Vaquinha #${newId}`,
+            description: 'Nova campanha de arrecadação extra.',
+            imageUrl: 'https://picsum.photos/seed/new/100/100',
+            status: 'Em Análise',
+            startDate: '20/08/2026',
+            endDate: '02/10/2026',
+            type: 'Proporcional'
+        };
+        setMyCampaigns([...myCampaigns, newCampaign]);
+        alert('Nova vaquinha criada com sucesso!');
+    };
+
+    const handleEdit = (id: number) => {
+        alert(`Editando campanha ID: ${id}. (Funcionalidade simulada)`);
+    };
+
+    const handleView = (id: number) => {
+        alert(`Visualizando detalhes da campanha ID: ${id}. (Funcionalidade simulada)`);
+    };
+    
+    const handleDelete = (id: number) => {
+        if(window.confirm("Tem certeza que deseja excluir esta vaquinha?")) {
+             setMyCampaigns(myCampaigns.filter(c => c.id !== id));
+        }
+    }
+
     return (
         <div>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
@@ -37,7 +67,10 @@ const DashboardHomePage: React.FC = () => {
                     <h1 className="text-3xl font-bold text-gray-900">Minhas Vaquinhas</h1>
                     <p className="mt-1 text-gray-600">Gerencie suas campanhas de arrecadação.</p>
                 </div>
-                <button className="mt-4 md:mt-0 flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md hover:bg-indigo-700 transition-colors font-medium shadow-md">
+                <button 
+                    onClick={handleNewCampaign}
+                    className="mt-4 md:mt-0 flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md hover:bg-indigo-700 transition-colors font-medium shadow-md"
+                >
                     <PlusCircle size={20} /> Nova Vaquinha
                 </button>
             </div>
@@ -84,8 +117,9 @@ const DashboardHomePage: React.FC = () => {
                                     <td className="p-6 text-sm text-gray-600 font-medium">{campaign.type}</td>
                                     <td className="p-6 text-right">
                                         <div className="flex items-center justify-end gap-3">
-                                            <button title="Ver" className="text-gray-400 hover:text-primary transition-colors"><Eye size={20}/></button>
-                                            <button title="Editar" className="text-gray-400 hover:text-primary transition-colors"><Edit size={20}/></button>
+                                            <button onClick={() => handleView(campaign.id)} title="Ver" className="text-gray-400 hover:text-primary transition-colors"><Eye size={20}/></button>
+                                            <button onClick={() => handleEdit(campaign.id)} title="Editar" className="text-gray-400 hover:text-primary transition-colors"><Edit size={20}/></button>
+                                            <button onClick={() => handleDelete(campaign.id)} title="Excluir" className="text-gray-400 hover:text-red-500 transition-colors"><Trash2 size={20}/></button>
                                         </div>
                                     </td>
                                 </tr>

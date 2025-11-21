@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Candidate } from '../types';
 import { Coins, MapPin } from 'lucide-react';
+import VerificationBadges from './VerificationBadges';
 
 interface CandidateCardProps {
   candidate: Candidate;
@@ -13,9 +14,21 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
-      <img src={candidate.photoUrl} alt={candidate.name} className="w-full h-48 object-cover" />
+      <div className="relative h-48">
+        <img src={candidate.photoUrl} alt={candidate.name} className="w-full h-full object-cover" />
+        <div className="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm rounded-md px-2 py-1">
+             <VerificationBadges 
+                paymentStatus={candidate.paymentStatus} 
+                tseStatus={candidate.tseStatus} 
+                hasBio={!!candidate.description} 
+                size={16}
+            />
+        </div>
+      </div>
       <div className="p-4 flex flex-col flex-grow">
-        <h3 className="text-xl font-bold text-gray-900">{candidate.name}</h3>
+        <div className="flex justify-between items-start">
+            <h3 className="text-xl font-bold text-gray-900 line-clamp-1" title={candidate.name}>{candidate.name}</h3>
+        </div>
         <p className="text-sm font-medium text-primary">{candidate.party.acronym}</p>
         <div className="flex items-center text-gray-500 text-sm mt-2">
           <MapPin size={16} className="mr-1" />

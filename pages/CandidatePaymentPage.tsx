@@ -60,7 +60,7 @@ const CandidatePaymentPage: React.FC = () => {
                 <div className="text-center mb-8">
                     <Logo />
                     <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Finalize sua Inscrição</h2>
-                    <p className="mt-2 text-gray-600">Taxa única de adesão: <span className="font-bold text-secondary text-lg">R$ 199,00</span></p>
+                    <p className="mt-2 text-gray-600">Taxa única de adesão: <span className="font-bold text-secondary text-lg">R$ 189,00</span></p>
                 </div>
 
                 <div className="bg-white rounded-lg shadow-xl overflow-hidden">
@@ -167,7 +167,7 @@ const CandidatePaymentPage: React.FC = () => {
                                             <Lock size={14} /> Ambiente Seguro
                                         </div>
                                         <button onClick={handleFinish} className="bg-green-600 text-white px-8 py-3 rounded-md font-bold hover:bg-green-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                                            Pagar R$ 199,00
+                                            Pagar R$ 189,00
                                         </button>
                                     </div>
                                 </div>

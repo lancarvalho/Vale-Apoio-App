@@ -3,15 +3,16 @@ import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import Logo from '../../components/Logo';
-import { LayoutDashboard, Users, DollarSign, LogOut, Menu, X, ShieldCheck, FileText, Search, Activity } from 'lucide-react';
+import { LayoutDashboard, Users, DollarSign, LogOut, Menu, X, ShieldCheck, FileText, Search, Activity, Bell, Settings, ExternalLink, Map, GitMerge } from 'lucide-react';
 
 const navItems = [
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { name: 'Candidatos', path: '/admin/candidatos', icon: Users },
     { name: 'Doações', path: '/admin/doacoes', icon: DollarSign },
-    { name: 'Saques', path: '/admin/saques', icon: Activity }, // Trocado ícone para diferenciar
+    { name: 'Saques', path: '/admin/saques', icon: Activity }, 
     { name: 'Relatórios TSE', path: '/admin/relatorios-tse', icon: FileText },
     { name: 'Auditoria', path: '/admin/auditoria', icon: ShieldCheck },
+    { name: 'Configurações', path: '/admin/configuracoes', icon: Settings },
 ];
 
 const AdminSidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({ isOpen, toggle }) => {
@@ -46,6 +47,7 @@ const AdminSidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({ isOpe
                         <NavLink
                             key={item.name}
                             to={item.path}
+                            onClick={toggle} // Fecha sidebar no mobile
                             end={item.path === '/admin'}
                             className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${isActive ? 'bg-primary text-white font-medium shadow-lg shadow-primary/20' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}`}
                         >
@@ -55,8 +57,24 @@ const AdminSidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({ isOpe
                     ))}
                 </nav>
                 <div className="p-4 border-t border-gray-800 bg-gray-900">
-                     <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2 text-gray-400 rounded-md hover:bg-red-500/10 hover:text-red-400 transition-colors">
-                        <LogOut size={20} />
+                    <Link to="/" className="w-full flex items-center gap-3 px-4 py-2 text-emerald-400 rounded-md hover:bg-emerald-500/10 transition-colors mb-1 text-sm">
+                         <ExternalLink size={18} />
+                         <span>Ir para o Site</span>
+                    </Link>
+                    <Link to="/admin/mapa-do-site" className="w-full flex items-center gap-3 px-4 py-2 text-gray-400 rounded-md hover:bg-gray-800 hover:text-white transition-colors mb-1 text-sm">
+                         <Map size={18} />
+                         <span>Mapa do Site</span>
+                    </Link>
+                    <Link to="/admin/roadmap" className="w-full flex items-center gap-3 px-4 py-2 text-gray-400 rounded-md hover:bg-gray-800 hover:text-white transition-colors mb-1 text-sm">
+                         <GitMerge size={18} />
+                         <span>Roadmap Evolutivo</span>
+                    </Link>
+                    <Link to="/admin/comparativo-cloud" className="w-full flex items-center gap-3 px-4 py-2 text-gray-400 rounded-md hover:bg-gray-800 hover:text-white transition-colors mb-2 text-sm">
+                         <FileText size={18} />
+                         <span>Comparativo Cloud</span>
+                    </Link>
+                     <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2 text-gray-400 rounded-md hover:bg-red-500/10 hover:text-red-400 transition-colors text-sm">
+                        <LogOut size={18} />
                         <span>Sair do Sistema</span>
                     </button>
                 </div>
@@ -87,12 +105,42 @@ const AdminLayout: React.FC = () => {
         <div className="flex h-screen bg-gray-100">
             <AdminSidebar isOpen={sidebarOpen} toggle={() => setSidebarOpen(!sidebarOpen)} />
             <div className="flex-1 flex flex-col overflow-hidden">
-                <header className="flex md:hidden items-center justify-between bg-white h-16 px-4 border-b shadow-sm z-10">
-                     <button onClick={() => setSidebarOpen(true)} className="text-gray-600">
-                        <Menu size={24} />
-                    </button>
-                    <span className="font-semibold text-gray-800">Painel Admin</span>
-                    <div className="w-6"></div> {/* Spacer to center title */}
+                <header className="flex items-center justify-between bg-white h-16 px-4 border-b shadow-sm z-10">
+                    <div className="flex items-center gap-4">
+                         <button onClick={() => setSidebarOpen(true)} className="md:hidden text-gray-600">
+                            <Menu size={24} />
+                        </button>
+                        <span className="font-semibold text-gray-800 hidden md:block">Painel Administrativo</span>
+                    </div>
+                    
+                    {/* Header Actions: Search & Notifications */}
+                    <div className="flex items-center gap-4">
+                        <div className="relative hidden sm:block">
+                            <input 
+                                type="text" 
+                                placeholder="Busca rápida..." 
+                                className="pl-9 pr-4 py-1.5 rounded-full bg-gray-100 border-transparent focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent text-sm transition-all w-64"
+                            />
+                            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/>
+                        </div>
+
+                        <button className="relative p-2 text-gray-500 hover:text-primary hover:bg-gray-50 rounded-full transition-colors">
+                            <Bell size={20} />
+                            <span className="absolute top-1.5 right-1.5 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white animate-pulse"></span>
+                        </button>
+
+                        <div className="h-8 w-px bg-gray-200 mx-1"></div>
+
+                        <div className="flex items-center gap-3">
+                            <div className="text-right hidden sm:block">
+                                <p className="text-sm font-bold text-gray-900">{user.name}</p>
+                                <p className="text-xs text-gray-500">Super Admin</p>
+                            </div>
+                            <div className="w-9 h-9 rounded-full bg-gray-800 flex items-center justify-center text-white font-bold">
+                                {user.name.charAt(0)}
+                            </div>
+                        </div>
+                    </div>
                 </header>
                 <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 lg:p-8 bg-gray-50">
                     <Outlet />

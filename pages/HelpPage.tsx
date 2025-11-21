@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Mail, MessageCircle } from 'lucide-react';
+import { useConfig } from '../contexts/ConfigContext';
 
 const FaqItem: React.FC<{ question: string; children: React.ReactNode }> = ({ question, children }) => (
     <details className="group border-b border-gray-200 py-4">
@@ -27,6 +28,8 @@ const FaqSection: React.FC<{title: string; children: React.ReactNode}> = ({ titl
 
 
 const HelpPage: React.FC = () => {
+    const { config } = useConfig();
+
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="grid lg:grid-cols-2 gap-16">
@@ -75,7 +78,7 @@ const HelpPage: React.FC = () => {
                            <p>Sim. Todas as transações financeiras feitas por cartão de crédito possuem um rigoroso sistema antifraude para não colocar o seu apoio em risco.</p>
                         </FaqItem>
                         <FaqItem question="Quais são as taxas da plataforma?">
-                           <p>Para doações (PIX, cartão ou boleto), a taxa é de <strong>3,65%</strong> por transação. Para candidatos, existe uma taxa única de adesão de <strong>R$189,00</strong>, paga no início do período de arrecadação. Para saques, o primeiro é gratuito e os demais custam <strong>R$5,00</strong> por operação.</p>
+                           <p>Para doações (PIX, cartão ou boleto), a taxa é de <strong>{config.transactionFee}%</strong> por transação. Para candidatos, existe uma taxa única de adesão de <strong>R${config.registrationFee}</strong>, paga no início do período de arrecadação. Para saques, o primeiro é gratuito e os demais custam <strong>R$5,00</strong> por operação.</p>
                         </FaqItem>
                          <FaqItem question="É emitido um recibo de doação?">
                            <p>Sim. Seguindo as regras do TSE, um recibo oficial é emitido no CPF do doador para cada doação realizada, garantindo a transparência e conformidade legal.</p>
@@ -129,9 +132,9 @@ const HelpPage: React.FC = () => {
                 </div>
             </div>
              {/* Floating WhatsApp button */}
-            <button className="fixed bottom-6 right-6 bg-green-500 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 transition-transform hover:scale-110" aria-label="Fale conosco no WhatsApp">
+            <a href={`https://wa.me/${config.whatsapp}`} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 bg-green-500 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 transition-transform hover:scale-110" aria-label="Fale conosco no WhatsApp">
                 <MessageCircle size={28} />
-            </button>
+            </a>
         </div>
     );
 };

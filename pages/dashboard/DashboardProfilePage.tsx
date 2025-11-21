@@ -1,19 +1,39 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { Save } from 'lucide-react';
+import { Save, Loader, CheckCircle } from 'lucide-react';
 
 const DashboardProfilePage: React.FC = () => {
-    const { user } = useAuth();
+    const { user, updateUser } = useAuth();
     const [formData, setFormData] = useState({
         name: user?.name || '',
         cpf: user?.cpf || '',
         email: user?.email || '',
         password: '',
     });
+    const [isSaving, setIsSaving] = useState(false);
+    const [saveSuccess, setSaveSuccess] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSave = () => {
+        setIsSaving(true);
+        setSaveSuccess(false);
+        
+        // Simula API call
+        setTimeout(() => {
+            // Atualiza o contexto global para refletir a mudança no Header imediatamente
+            updateUser({
+                name: formData.name,
+                email: formData.email
+            });
+            
+            setIsSaving(false);
+            setSaveSuccess(true);
+            setTimeout(() => setSaveSuccess(false), 3000);
+        }, 1500);
     };
 
     return (
@@ -33,7 +53,7 @@ const DashboardProfilePage: React.FC = () => {
                         <label className="block text-sm font-bold text-gray-700 mb-2">CPF</label>
                         <div className="relative">
                             <input name="cpf" value={formData.cpf} disabled className="w-full bg-gray-50 border-gray-200 text-gray-500 rounded-md shadow-sm border p-3 cursor-not-allowed" />
-                            <p className="text-xs text-gray-400 mt-1">Este campo não pode ser alterado.</p>
+                            <p className="text-xs text-gray-400 mt-1">Este campo não pode ser alterado por segurança.</p>
                         </div>
                     </div>
                     
@@ -51,9 +71,19 @@ const DashboardProfilePage: React.FC = () => {
                     </div>
                  </div>
 
-                 <div className="mt-8 flex justify-end">
-                    <button className="bg-primary text-white px-6 py-3 rounded-md font-bold flex items-center gap-2 hover:bg-indigo-700 transition-colors shadow-md">
-                         <Save size={20} /> Salvar Alterações
+                 <div className="mt-8 flex items-center justify-end gap-4">
+                    {saveSuccess && (
+                        <span className="text-green-600 flex items-center gap-1 text-sm font-medium animate-fadeIn">
+                            <CheckCircle size={16} /> Dados salvos com sucesso!
+                        </span>
+                    )}
+                    <button 
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className="bg-primary text-white px-6 py-3 rounded-md font-bold flex items-center gap-2 hover:bg-indigo-700 transition-colors shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
+                         {isSaving ? <Loader size={20} className="animate-spin"/> : <Save size={20} />} 
+                         {isSaving ? 'Salvando...' : 'Salvar Alterações'}
                     </button>
                  </div>
             </div>
