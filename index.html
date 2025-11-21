@@ -24,18 +24,29 @@
     <style>
       /* Correção crítica para impressão de SPAs */
       @media print {
-        body, #root, main, div[class*="flex-col"] {
+        html, body {
+          height: auto !important;
+          overflow: visible !important;
+          background: white !important;
+        }
+        #root, main, div[class*="flex-col"], div[class*="overflow-"] {
           height: auto !important;
           overflow: visible !important;
           display: block !important;
+          position: relative !important;
         }
         /* Esconde elementos de navegação na impressão */
-        aside, header, .no-print {
+        aside, header, nav, .no-print {
           display: none !important;
         }
         /* Remove sombras e bordas desnecessárias */
         .shadow-xl, .shadow-md, .shadow-sm {
           box-shadow: none !important;
+        }
+        /* Garante que o fundo branco prevaleça */
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
         }
       }
     </style>

@@ -11,7 +11,7 @@ const SitemapNode: React.FC<{
   isLast?: boolean;
 }> = ({ title, icon: Icon, color = "border-gray-300", description, children, isLast }) => {
   return (
-    <div className="flex flex-col relative pl-8">
+    <div className="flex flex-col relative pl-8 break-inside-avoid">
       {/* Linha Vertical conectora */}
       <div className={`absolute top-0 bottom-0 left-0 w-px bg-gray-300 ${isLast ? 'h-8' : ''}`}></div>
       
@@ -42,8 +42,8 @@ const SitemapView: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-8 text-gray-800 font-sans print:p-0">
-      <div className="max-w-5xl mx-auto border border-gray-200 shadow-xl p-10 bg-white print:shadow-none print:border-none print:p-0">
+    <div className="bg-white p-8 text-gray-800 font-sans print:p-0 print:text-black">
+      <div className="max-w-5xl mx-auto border border-gray-200 shadow-xl p-10 bg-white print:shadow-none print:border-none print:p-0 print:max-w-none">
         
         {/* Header do Documento */}
         <div className="flex justify-between items-center mb-12 border-b pb-6">
@@ -67,7 +67,7 @@ const SitemapView: React.FC = () => {
         {/* Diagrama */}
         <div className="ml-4">
             {/* NÓ RAIZ */}
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-3 mb-8 break-inside-avoid">
                 <div className="p-3 bg-gray-800 text-white rounded-lg shadow-md z-10">
                     <Server size={24} />
                 </div>

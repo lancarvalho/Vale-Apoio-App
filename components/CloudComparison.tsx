@@ -8,8 +8,8 @@ const CloudComparison: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-8 text-gray-800 font-sans print:p-0">
-      <div className="max-w-4xl mx-auto border border-gray-200 shadow-lg p-10 bg-white print:shadow-none print:border-none print:p-0">
+    <div className="bg-white p-8 text-gray-800 font-sans print:p-0 print:text-black">
+      <div className="max-w-4xl mx-auto border border-gray-200 shadow-lg p-10 bg-white print:shadow-none print:border-none print:p-0 print:max-w-none">
         
         {/* Header do Documento */}
         <div className="flex justify-between items-center mb-10 border-b pb-6">
@@ -29,7 +29,7 @@ const CloudComparison: React.FC = () => {
         </div>
 
         {/* Resumo Executivo */}
-        <section className="mb-10">
+        <section className="mb-10 break-inside-avoid">
           <h2 className="text-xl font-bold text-gray-800 mb-4 uppercase tracking-wide">1. Resumo Executivo</h2>
           <p className="text-gray-700 leading-relaxed text-justify">
             Este documento analisa a migração da infraestrutura de hospedagem do Frontend da Vercel para o <strong>Google Cloud Platform (Firebase Hosting)</strong>. 
@@ -44,7 +44,7 @@ const CloudComparison: React.FC = () => {
           
           <div className="grid grid-cols-2 gap-8">
             {/* Coluna Vercel */}
-            <div className="border rounded-lg p-6 bg-gray-50">
+            <div className="border rounded-lg p-6 bg-gray-50 break-inside-avoid">
               <div className="flex items-center gap-2 mb-4">
                 <Server size={24} className="text-gray-600" />
                 <h3 className="text-lg font-bold">Vercel (Atual)</h3>
@@ -74,7 +74,7 @@ const CloudComparison: React.FC = () => {
             </div>
 
             {/* Coluna Google Cloud */}
-            <div className="border-2 border-primary/20 rounded-lg p-6 bg-indigo-50/50">
+            <div className="border-2 border-primary/20 rounded-lg p-6 bg-indigo-50/50 break-inside-avoid">
                <div className="flex items-center gap-2 mb-4">
                 <Cloud size={24} className="text-primary" />
                 <h3 className="text-lg font-bold text-primary">Google Cloud / Firebase</h3>
@@ -106,7 +106,7 @@ const CloudComparison: React.FC = () => {
         </section>
 
         {/* Tabela de Custos Estimados */}
-        <section className="mb-10">
+        <section className="mb-10 break-inside-avoid">
           <h2 className="text-xl font-bold text-gray-800 mb-4 uppercase tracking-wide">3. Projeção de Custos (Cenário Eleitoral)</h2>
           <div className="overflow-hidden border rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
@@ -144,7 +144,7 @@ const CloudComparison: React.FC = () => {
         </section>
 
         {/* Conclusão */}
-        <section className="bg-green-50 border border-green-200 p-6 rounded-lg">
+        <section className="bg-green-50 border border-green-200 p-6 rounded-lg break-inside-avoid">
           <h2 className="text-lg font-bold text-green-800 mb-2">4. Conclusão e Recomendação</h2>
           <p className="text-green-700 text-sm leading-relaxed">
             Recomenda-se a <strong>migração total para o Google Cloud (Firebase)</strong>. Além da redução drástica de custos fixos mensais (ideal para o fluxo de caixa inicial), 

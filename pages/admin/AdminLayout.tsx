@@ -25,7 +25,7 @@ const AdminSidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({ isOpe
 
     return (
         <>
-            <aside className={`fixed z-30 inset-y-0 left-0 bg-gray-900 text-white border-r border-gray-800 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:flex md:flex-col w-64 transition-transform duration-300 ease-in-out`}>
+            <aside className={`fixed z-30 inset-y-0 left-0 bg-gray-900 text-white border-r border-gray-800 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:flex md:flex-col w-64 transition-transform duration-300 ease-in-out print:hidden`}>
                 <div className="flex items-center justify-between h-16 px-4 border-b border-gray-800 bg-gray-900">
                     <Logo />
                     <button onClick={toggle} className="md:hidden text-gray-300 hover:text-white">
@@ -78,7 +78,7 @@ const AdminSidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({ isOpe
                     </button>
                 </div>
             </aside>
-            {isOpen && <div className="fixed inset-0 bg-black/60 z-20 md:hidden" onClick={toggle}></div>}
+            {isOpen && <div className="fixed inset-0 bg-black/60 z-20 md:hidden print:hidden" onClick={toggle}></div>}
         </>
     );
 };
@@ -101,11 +101,11 @@ const AdminLayout: React.FC = () => {
     }
     
     return (
-        <div className="flex h-screen bg-gray-100 print:h-auto print:block">
+        <div className="flex h-screen bg-gray-100 print:h-auto print:bg-white print:block">
             <div className="print:hidden">
                 <AdminSidebar isOpen={sidebarOpen} toggle={() => setSidebarOpen(!sidebarOpen)} />
             </div>
-            <div className="flex-1 flex flex-col overflow-hidden print:overflow-visible print:h-auto">
+            <div className="flex-1 flex flex-col overflow-hidden print:overflow-visible print:h-auto print:block">
                 <header className="flex items-center justify-between bg-white h-16 px-4 border-b shadow-sm z-10 print:hidden">
                     <div className="flex items-center gap-4">
                          <button onClick={() => setSidebarOpen(true)} className="md:hidden text-gray-600">
@@ -143,7 +143,7 @@ const AdminLayout: React.FC = () => {
                         </div>
                     </div>
                 </header>
-                <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 lg:p-8 bg-gray-50 print:overflow-visible print:h-auto print:p-0 print:bg-white">
+                <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 lg:p-8 bg-gray-50 print:p-0 print:overflow-visible print:h-auto print:bg-white">
                     <Outlet />
                 </main>
             </div>

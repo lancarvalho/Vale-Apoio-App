@@ -24,7 +24,7 @@ const RoadmapItem: React.FC<{
   };
 
   return (
-    <div className="flex gap-6 relative">
+    <div className="flex gap-6 relative break-inside-avoid">
       {/* Timeline Line */}
       {!isLast && (
         <div className={`absolute left-6 top-12 bottom-[-24px] w-1 ${status === 'done' ? 'bg-green-200' : 'bg-gray-100'} -z-10`}></div>
@@ -60,8 +60,8 @@ const RoadmapView: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-8 text-gray-800 font-sans print:p-0">
-      <div className="max-w-4xl mx-auto border border-gray-200 shadow-xl p-12 bg-white print:shadow-none print:border-none print:p-0">
+    <div className="bg-white p-8 text-gray-800 font-sans print:p-0 print:text-black">
+      <div className="max-w-4xl mx-auto border border-gray-200 shadow-xl p-12 bg-white print:shadow-none print:border-none print:p-0 print:max-w-none">
         
         {/* Header */}
         <div className="flex justify-between items-start mb-16 border-b pb-8">

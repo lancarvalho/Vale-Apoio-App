@@ -70,19 +70,45 @@ const AdminDonationsPage: React.FC = () => {
         document.body.removeChild(link);
     };
 
-    // Print Logic
+    // Print Logic (Improved for styling consistency)
     const handlePrintReceipt = () => {
-        const printContent = document.getElementById('receipt-modal-content');
+        const printContent = document.getElementById('receipt-content');
         if (printContent) {
-            const printWindow = window.open('', '', 'height=600,width=800');
+            const printWindow = window.open('', '_blank', 'height=800,width=800');
             if (printWindow) {
-                printWindow.document.write('<html><head><title>Recibo de Doação</title>');
-                printWindow.document.write('<script src="https://cdn.tailwindcss.com"></script>'); // Load tailwind for print
-                printWindow.document.write('</head><body >');
-                printWindow.document.write(printContent.innerHTML);
-                printWindow.document.write('</body></html>');
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Recibo de Doação - Vale Apoio</title>
+                            <script src="https://cdn.tailwindcss.com"></script>
+                            <style>
+                                @media print {
+                                    body { 
+                                        -webkit-print-color-adjust: exact !important; 
+                                        print-color-adjust: exact !important; 
+                                        background-color: white !important;
+                                    }
+                                    @page { margin: 0; size: A4; }
+                                    .no-print { display: none; }
+                                }
+                                body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+                            </style>
+                        </head>
+                        <body class="bg-gray-100 flex items-center justify-center min-h-screen p-8">
+                            <div class="w-full max-w-2xl bg-white shadow-none print:shadow-none scale-100 transform origin-top">
+                                ${printContent.innerHTML}
+                            </div>
+                            <script>
+                                // Delay printing to ensure Tailwind classes are parsed and applied
+                                setTimeout(() => {
+                                    window.print();
+                                    window.close();
+                                }, 1000);
+                            </script>
+                        </body>
+                    </html>
+                `);
                 printWindow.document.close();
-                printWindow.print();
             }
         }
     };
@@ -181,8 +207,8 @@ const AdminDonationsPage: React.FC = () => {
                             </button>
                         </div>
                         
-                        <div className="overflow-y-auto p-8 bg-white" id="receipt-modal-content">
-                            <div className="border-4 border-double border-gray-200 p-8 max-w-xl mx-auto">
+                        <div className="overflow-y-auto p-8 bg-white">
+                            <div id="receipt-content" className="border-4 border-double border-gray-200 p-8 max-w-xl mx-auto bg-white">
                                 <div className="text-center mb-8">
                                     <div className="flex justify-center mb-4 transform scale-125">
                                         <Logo />
@@ -205,7 +231,7 @@ const AdminDonationsPage: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <div className="bg-gray-50 p-6 rounded-lg text-center mb-8 border border-gray-100">
+                                <div className="bg-gray-50 p-6 rounded-lg text-center mb-8 border border-gray-100 print:bg-gray-50">
                                     <p className="text-sm text-gray-500 mb-1">Valor da Doação</p>
                                     <p className="text-4xl font-bold text-primary">
                                         {selectedDonation.amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
