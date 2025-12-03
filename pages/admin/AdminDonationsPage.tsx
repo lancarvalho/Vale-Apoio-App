@@ -257,7 +257,7 @@ const AdminDonationsPage: React.FC = () => {
                                 <div className="mt-8 text-[10px] text-gray-400 text-center leading-tight">
                                     <p>Este recibo é emitido em conformidade com a Resolução TSE nº 23.607/2019.</p>
                                     <p>A doação eleitoral é um ato de cidadania e deve respeitar os limites legais de 10% dos rendimentos brutos do ano anterior.</p>
-                                    <p className="mt-2">Vale Apoio - CNPJ 55.302.823/0001-63</p>
+                                    <p className="mt-2">Vale Apoio - CNPJ 02.345.678/0001-90</p>
                                 </div>
                             </div>
                         </div>

@@ -20,7 +20,7 @@ interface ConfigContextType {
 
 const defaultSettings: PlatformConfig = {
   companyName: 'VALEAPOIO.COM.BR LTDA',
-  cnpj: '55.302.823/0001-63',
+  cnpj: '02.345.678/0001-90',
   address: 'SQS 302 Bloco A, Asa Sul, Brasília - DF',
   supportEmail: 'contato@valeapoio.com.br',
   whatsapp: '5561999999999',

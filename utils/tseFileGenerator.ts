@@ -1,3 +1,4 @@
+
 import { Candidate, Donation } from '../types';
 
 /**
@@ -8,7 +9,7 @@ import { Candidate, Donation } from '../types';
  */
 
 // Constantes da Plataforma
-const PLATFORM_CNPJ = "55302823000163"; // CNPJ Vale Apoio (apenas números)
+const PLATFORM_CNPJ = "02345678000190"; // CNPJ Vale Apoio (apenas números)
 const PLATFORM_NAME = "VALEAPOIO.COM.BR LTDA";
 
 // Helpers de Formatação Posicional

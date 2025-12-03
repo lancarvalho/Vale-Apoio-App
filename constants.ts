@@ -131,7 +131,7 @@ export const TERMS_CONTENT = `
 
 <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mt-8 mb-4 border-b pb-2">I – DAS PARTES</h2>
 <p class="text-gray-700 leading-relaxed mb-4">
-  De um lado, a parte <strong>CONTRATANTE</strong>, pessoa física, nominada e qualificada na ficha cadastral anexa a este instrumento, candidato às eleições 2026, de outro lado, pessoa jurídica <strong>VALEAPOIO.COM.BR LTDA</strong>, inscrita no CNPJ nº 55.302.823/0001-63, doravante denominado de parte <strong>CONTRATADA</strong>, ajustam entre si, mediante as cláusulas e condições que seguem.
+  De um lado, a parte <strong>CONTRATANTE</strong>, pessoa física, nominada e qualificada na ficha cadastral anexa a este instrumento, candidato às eleições 2026, de outro lado, pessoa jurídica <strong>VALEAPOIO.COM.BR LTDA</strong>, inscrita no CNPJ nº 02.345.678/0001-90, doravante denominado de parte <strong>CONTRATADA</strong>, ajustam entre si, mediante as cláusulas e condições que seguem.
 </p>
 
 <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mt-8 mb-4 border-b pb-2">II - DA FORMA</h2>
