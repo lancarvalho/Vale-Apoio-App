@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Candidate } from '../types';
-import { Coins, MapPin } from 'lucide-react';
+import { Coins, MapPin, BadgeCheck } from 'lucide-react';
 import VerificationBadges from './VerificationBadges';
 
 interface CandidateCardProps {
@@ -12,8 +12,12 @@ interface CandidateCardProps {
 const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
   const totalRaised = candidate.donations.reduce((acc, donation) => acc + donation.amount, 0);
 
+  // Lógica para o selo de verificação ao lado do nome
+  const isVerified = candidate.paymentStatus === 'Ativo' && 
+                     (candidate.tseStatus === 'Deferida' || candidate.tseStatus === 'Deferida com Recurso');
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
       <div className="relative h-48">
         <img src={candidate.photoUrl} alt={candidate.name} className="w-full h-full object-cover" />
         <div className="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm rounded-md px-2 py-1">
@@ -26,8 +30,15 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
         </div>
       </div>
       <div className="p-4 flex flex-col flex-grow">
-        <div className="flex justify-between items-start">
-            <h3 className="text-xl font-bold text-gray-900 line-clamp-1" title={candidate.name}>{candidate.name}</h3>
+        <div className="flex items-start gap-1 mb-1">
+            <h3 className="text-xl font-bold text-gray-900 line-clamp-1" title={candidate.name}>
+                {candidate.name}
+            </h3>
+            {isVerified && (
+                <div title="Candidato Verificado e Apto">
+                    <BadgeCheck size={20} className="text-blue-500 fill-blue-50 flex-shrink-0" />
+                </div>
+            )}
         </div>
         <p className="text-sm font-medium text-primary">{candidate.party.acronym}</p>
         <div className="flex items-center text-gray-500 text-sm mt-2">

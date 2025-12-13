@@ -4,7 +4,7 @@ import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useConfig } from '../../contexts/ConfigContext';
 import Logo from '../../components/Logo';
-import { Home, DollarSign, FileText, User, HelpCircle, LogOut, Menu, X, Image as ImageIcon, ArrowLeft, MessageCircle, Bell, Clock } from 'lucide-react';
+import { Home, DollarSign, FileText, User, HelpCircle, LogOut, Menu, X, Image as ImageIcon, ArrowLeft, MessageCircle, Bell, Clock, CheckCircle } from 'lucide-react';
 import DashboardPaymentModal from '../../components/DashboardPaymentModal';
 import VerificationBadges from '../../components/VerificationBadges';
 
@@ -17,6 +17,7 @@ const navItems = [
     { name: 'Ajuda', path: '/ajuda', icon: HelpCircle, external: true },
 ];
 
+// Componente Sidebar (Movido para dentro do arquivo para contexto, mas poderia ser separado)
 const Sidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({ isOpen, toggle }) => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
@@ -41,7 +42,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({ isOpen, to
                              <Link 
                                 key={item.name} 
                                 to={item.path} 
-                                onClick={toggle} // Fecha sidebar no mobile ao clicar
+                                onClick={toggle} 
                                 className="flex items-center gap-3 px-4 py-3 text-gray-600 rounded-lg hover:bg-gray-50 hover:text-primary transition-all group"
                             >
                                 <item.icon size={20} className="group-hover:scale-110 transition-transform" />
@@ -52,7 +53,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({ isOpen, to
                                 key={item.name}
                                 to={item.path}
                                 end={item.path === '/painel'}
-                                onClick={toggle} // Fecha sidebar no mobile ao clicar
+                                onClick={toggle}
                                 className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all group ${isActive ? 'bg-primary text-white shadow-md shadow-primary/20' : 'text-gray-600 hover:bg-gray-50 hover:text-primary'}`}
                             >
                                 <item.icon size={20} className="group-hover:scale-110 transition-transform" />
@@ -79,6 +80,19 @@ const DashboardLayout: React.FC = () => {
     const { config } = useConfig();
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    
+    // Notification Logic
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [notifications, setNotifications] = useState([
+        { id: 1, title: 'Pagamento de inscrição confirmado!', time: 'Há 5 min', read: false },
+        { id: 2, title: 'Nova doação recebida: R$ 50,00', time: 'Há 1 hora', read: false },
+        { id: 3, title: 'Seu perfil foi verificado pelo TSE.', time: 'Ontem', read: true },
+    ]);
+    const unreadCount = notifications.filter(n => !n.read).length;
+
+    const handleMarkAllRead = () => {
+        setNotifications(notifications.map(n => ({ ...n, read: true })));
+    };
 
     if (!user || user.type !== 'candidate') {
         return <div className="p-8">Acesso negado. Faça login como candidato. <NavLink to="/acessar" className="text-primary underline">Login</NavLink></div>;
@@ -93,7 +107,7 @@ const DashboardLayout: React.FC = () => {
         <div className="flex h-screen bg-gray-100">
             <Sidebar isOpen={sidebarOpen} toggle={() => setSidebarOpen(!sidebarOpen)} />
             <div className="flex-1 flex flex-col overflow-hidden relative">
-                <header className={`${user.pendingPayment ? 'bg-[#6366F1] text-white' : 'bg-white text-gray-800'} h-20 px-4 sm:px-8 border-b shadow-sm flex items-center justify-between z-20 transition-colors duration-300`}>
+                <header className={`${user.pendingPayment ? 'bg-[#6366F1] text-white' : 'bg-white text-gray-800'} h-20 px-4 sm:px-8 border-b shadow-sm flex items-center justify-between z-20 transition-colors duration-300 relative`}>
                     <div className="flex items-center gap-4">
                         <button onClick={() => setSidebarOpen(true)} className={`md:hidden ${user.pendingPayment ? 'text-white' : 'text-gray-600'}`}>
                             <Menu size={24} />
@@ -102,7 +116,7 @@ const DashboardLayout: React.FC = () => {
                     </div>
 
                     {user.pendingPayment && (
-                        <div className="flex flex-col items-center justify-center absolute left-1/2 transform -translate-x-1/2 w-full sm:w-auto text-center">
+                        <div className="flex flex-col items-center justify-center absolute left-1/2 transform -translate-x-1/2 w-full sm:w-auto text-center hidden sm:flex">
                             <div className="flex items-center gap-2 font-bold uppercase tracking-wide text-sm sm:text-base">
                                 <Clock size={18} className="animate-pulse text-yellow-300"/>
                                 <span>PIX GERADO - PENDENTE</span>
@@ -117,12 +131,52 @@ const DashboardLayout: React.FC = () => {
                             <span>Voltar para o Site</span>
                         </Link>
 
-                        <button className={`relative p-2 rounded-full hover:bg-white/10 transition-colors ${user.pendingPayment ? 'text-white' : 'text-gray-500 hover:text-primary'}`}>
-                            <Bell size={22} />
-                            {user.pendingPayment && (
-                                <span className="absolute top-1.5 right-1.5 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white animate-pulse"></span>
+                        {/* Notification System */}
+                        <div className="relative">
+                            <button 
+                                onClick={() => setShowNotifications(!showNotifications)}
+                                className={`relative p-2 rounded-full hover:bg-white/10 transition-colors ${user.pendingPayment ? 'text-white' : 'text-gray-500 hover:text-primary'}`}
+                            >
+                                <Bell size={22} />
+                                {unreadCount > 0 && (
+                                    <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white ring-2 ring-white">
+                                        {unreadCount}
+                                    </span>
+                                )}
+                            </button>
+
+                            {/* Notification Dropdown */}
+                            {showNotifications && (
+                                <div className="absolute right-0 mt-3 w-80 bg-white rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 z-50 animate-fadeIn origin-top-right">
+                                    <div className="p-4 border-b flex justify-between items-center">
+                                        <h3 className="text-sm font-bold text-gray-800">Notificações</h3>
+                                        {unreadCount > 0 && (
+                                            <button onClick={handleMarkAllRead} className="text-xs text-primary hover:underline">
+                                                Marcar lidas
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="max-h-80 overflow-y-auto">
+                                        {notifications.length > 0 ? notifications.map(n => (
+                                            <div key={n.id} className={`p-4 border-b last:border-0 hover:bg-gray-50 transition-colors ${!n.read ? 'bg-indigo-50/50' : ''}`}>
+                                                <div className="flex gap-3">
+                                                    <div className={`mt-1 h-2 w-2 rounded-full flex-shrink-0 ${!n.read ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                                                    <div>
+                                                        <p className={`text-sm ${!n.read ? 'font-semibold text-gray-900' : 'text-gray-600'}`}>{n.title}</p>
+                                                        <p className="text-xs text-gray-400 mt-1">{n.time}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )) : (
+                                            <div className="p-8 text-center text-gray-500 text-sm">Nenhuma notificação.</div>
+                                        )}
+                                    </div>
+                                    <div className="p-2 bg-gray-50 text-center rounded-b-lg">
+                                        <button onClick={() => setShowNotifications(false)} className="text-xs text-gray-500 hover:text-gray-800">Fechar</button>
+                                    </div>
+                                </div>
                             )}
-                        </button>
+                        </div>
 
                         <div className={`h-8 w-px ${user.pendingPayment ? 'bg-indigo-400' : 'bg-gray-200'}`}></div>
                         
@@ -157,7 +211,7 @@ const DashboardLayout: React.FC = () => {
                     </div>
                 </header>
 
-                <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 lg:p-8">
+                <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 lg:p-8" onClick={() => setShowNotifications(false)}>
                     <Outlet />
                 </main>
 

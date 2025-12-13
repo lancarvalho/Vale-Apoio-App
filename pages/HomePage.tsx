@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Zap, PiggyBank, BarChart } from 'lucide-react';
+import { ArrowRight, Zap, PiggyBank, BarChart, Trophy } from 'lucide-react';
 import { MOCK_CANDIDATES } from '../constants';
 import CandidateCard from '../components/CandidateCard';
 
@@ -118,14 +118,36 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Top Candidates Section */}
-      <section className="bg-gray-50 py-16 sm:py-24">
+      <section className="bg-gradient-to-b from-gray-50 to-white py-16 sm:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">Campeões de arrecadação</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {topCandidates.map(candidate => (
-              <CandidateCard key={candidate.id} candidate={candidate} />
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 flex items-center justify-center gap-2">
+               <Trophy className="text-yellow-500" size={32} />
+               Campeões de Arrecadação
+            </h2>
+            <p className="text-gray-600 mt-2">Os candidatos que estão movimentando a democracia.</p>
+          </div>
+          
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
+            {topCandidates.map((candidate, index) => (
+              <div key={candidate.id} className="relative transform hover:-translate-y-2 transition-transform duration-300">
+                {/* Visual Destaque Campeão */}
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
+                     <div className="bg-yellow-400 text-yellow-900 text-xs font-bold px-4 py-1 rounded-full shadow-md flex items-center gap-1 border-2 border-white">
+                        <Trophy size={12} />
+                        TOP {index + 1}
+                     </div>
+                </div>
+                {/* Borda Dourada */}
+                <div className="rounded-xl p-1 bg-gradient-to-br from-yellow-300 via-yellow-100 to-yellow-400 shadow-xl h-full">
+                    <div className="h-full bg-white rounded-lg overflow-hidden">
+                        <CandidateCard candidate={candidate} />
+                    </div>
+                </div>
+              </div>
             ))}
           </div>
+
            <div className="text-center mt-12">
             <Link to="/candidatos" className="text-primary font-semibold hover:underline flex items-center justify-center gap-2">
                 Ver todos os candidatos <ArrowRight size={18} />
