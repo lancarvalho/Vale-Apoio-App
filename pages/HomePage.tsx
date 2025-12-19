@@ -46,7 +46,7 @@ const HomePage: React.FC = () => {
                {/* Mobile Image */}
               <div className="md:hidden flex items-center justify-center mt-8">
                 <img 
-                  src="https://horizons-cdn.hostinger.com/ee1fec56-56e3-4bfc-a3ed-03c9f212598d/banner1-kVv0J.jpg" 
+                  src="https://www.renatorgomes.com/backup/valeapoio/banner1.jpg" 
                   alt="Candidato cumprimentando eleitora em frente a um posto eleitoral" 
                   className="w-full h-auto max-w-lg rounded-lg shadow-lg" 
                 />
@@ -59,7 +59,7 @@ const HomePage: React.FC = () => {
             style={{ clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0% 100%)' }}
           >
             <img
-                src="https://horizons-cdn.hostinger.com/ee1fec56-56e3-4bfc-a3ed-03c9f212598d/banner1-kVv0J.jpg"
+                src="https://www.renatorgomes.com/backup/valeapoio/banner1.jpg"
                 alt="Candidato cumprimentando eleitora em frente a um posto eleitoral"
                 className="w-full h-full object-cover"
             />
@@ -72,7 +72,7 @@ const HomePage: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="flex justify-center">
               <img 
-                src="https://horizons-cdn.hostinger.com/ee1fec56-56e3-4bfc-a3ed-03c9f212598d/banner2-k8aOB.jpg" 
+                src="https://www.renatorgomes.com/backup/valeapoio/banner2.jpg" 
                 alt="Mãos depositando doações em uma urna de acrílico com o logo do Vale Apoio" 
                 className="rounded-lg shadow-xl w-full"
               />
